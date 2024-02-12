@@ -1,0 +1,32 @@
+// ignore_for_file: unused_import
+
+import 'package:apk_barbershop/Booking.dart';
+import 'package:apk_barbershop/Footer.dart';
+import 'package:apk_barbershop/HomePage.dart';
+import 'package:apk_barbershop/LoginPage.dart';
+import 'package:apk_barbershop/Penjualan.dart';
+import 'package:apk_barbershop/Profil.dart';
+import 'package:apk_barbershop/Voucher.dart';
+import 'package:apk_barbershop/apercobaan.dart';
+import 'package:apk_barbershop/constant.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home:footer(),
+    );
+  }
+  
+
+}
