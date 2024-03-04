@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(25),
                                 child: Image.asset(
-                                  'assets/prabowo.jpg', // Mengubah path gambar
+                                  'assets/1.jpg', // Mengubah path gambar
                                   fit: BoxFit.cover,
                                 ),
                               ),

@@ -6,7 +6,7 @@ class Profil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE5E5E5),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -18,15 +18,21 @@ class Profil extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Richie Lorie",
                     style: Theme.of(context)
                         .textTheme
-                        .titleLarge
+                        .headline6
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 3),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Edit Profil'),
+                  ),
+                  const SizedBox(height: 5),
                   const _ProfileInfoRow(),
                 ],
               ),
@@ -43,47 +49,10 @@ class _ProfileInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 80,
-      constraints: const BoxConstraints(maxWidth: 400),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _singleItem(context, ProfileInfoItem("Posts", 0)),
-          _singleItem(context, ProfileInfoItem("Followers", 0)),
-          _singleItem(context, ProfileInfoItem("Following", 0)),
-        ],
-      ),
+    return Column(
+      
     );
   }
-
-  Widget _singleItem(BuildContext context, ProfileInfoItem item) => Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                item.value.toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            Text(
-              item.title,
-              style: Theme.of(context).textTheme.bodySmall,
-            )
-          ],
-        ),
-      );
-}
-
-class ProfileInfoItem {
-  final String title;
-  final int value;
-  const ProfileInfoItem(this.title, this.value);
 }
 
 class _TopPortion extends StatelessWidget {
@@ -151,4 +120,10 @@ class _TopPortion extends StatelessWidget {
       ],
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Profil(),
+  ));
 }

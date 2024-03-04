@@ -45,3 +45,4 @@ const kTextColor = Color(0xFF535353);
 const kTextLightColor = Color(0xFFACACAC);
 const kMainColor = Color(0xFFFFB9C4);
 const kMainDarkColor = Color(0xFFC7051A);
+const kapkColor = Color(0xFF0E2954);

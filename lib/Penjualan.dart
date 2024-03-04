@@ -1,3 +1,4 @@
+import 'package:apk_barbershop/Produk.dart';
 import 'package:flutter/material.dart';
 
 class ECommerceApp extends StatelessWidget {
@@ -6,129 +7,120 @@ class ECommerceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.pink, // Ubah warna menjadi pink
-        elevation: 5,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Ubah warna ikon menjadi putih
-          onPressed: () {
-            // Aksi yang akan dilakukan saat tombol back ditekan
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(200), // Tentukan tinggi app bar
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E2954), // Ubah warna latar belakang menjadi putih
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(24),
+              bottomRight: Radius.circular(24),
+            ),
+            boxShadow: [ 
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 7,
+                offset: Offset(0, 3), 
+              ),
+            ],
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent, 
+            elevation: 0, 
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white), // Warna ikon putih
+              onPressed: () {
+                // Aksi yang akan dilakukan saat tombol back ditekan
+              },
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.shopping_cart, color: Colors.white), // Warna ikon putih
+                onPressed: () {
+                  // Aksi yang akan dilakukan saat tombol keranjang belanja ditekan
+                },
+              ),
+            ],
+            flexibleSpace: AppbarBody(), // memanggil isian appbar
+          ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.white), // Ubah warna ikon menjadi putih
-            onPressed: () {
-              // Aksi yang akan dilakukan saat tombol pencarian ditekan
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.shopping_cart, color: Colors.white), // Ubah warna ikon menjadi putih
-            onPressed: () {
-              // Aksi yang akan dilakukan saat tombol keranjang belanja ditekan
-            },
-          ),
-        ],
       ),
-      body: UpperBody(),
+     body: Produk(
+     imagePaths: [
+    'assets/images/1.jpg',
+    'assets/images/2.jpg',
+    'assets/images/3.jpg',
+    'assets/images/4.jpg',
+    'assets/images/5.jpg',
+    'assets/images/6.jpg',
+    'assets/images/7.jpg',
+  ],
+),
+
     );
   }
 }
 
-class UpperBody extends StatefulWidget {
-  const UpperBody({Key? key}) : super(key: key);
+class AppbarBody extends StatelessWidget {
+  const AppbarBody({Key? key}) : super(key: key);
 
-  @override
-  State<UpperBody> createState() => _UpperBodyState();
-}
-
-class _UpperBodyState extends State<UpperBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white, // Ubah warna latar belakang menjadi putih
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
-        ),
-        boxShadow: [ // Tambahkan bayangan untuk efek visual
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, 
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "Find your, \nFavorite Items!",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 27,
+              color: Colors.white, 
+            ),
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Sesuaikan padding
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: Colors.black), // Ubah warna ikon menjadi hitam
-                  onPressed: () {
-                    // Aksi yang akan dilakukan saat tombol menu ditekan
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.shopping_cart, color: Colors.black), // Ubah warna ikon menjadi hitam
-                  onPressed: () {
-                    // Aksi yang akan dilakukan saat tombol keranjang belanja ditekan
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 10), // Tambahkan spasi antara elemen
-            Text(
-              "Find your Favorite Items!",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 27,
-                color: Colors.black, // Ubah warna teks menjadi hitam
-              ),
-            ),
-            SizedBox(height: 10), // Tambahkan spasi antara elemen
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200], // Ubah warna latar belakang menjadi abu-abu
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(24),
-                      ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.centerLeft, 
+                  height: 40,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200], 
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(24),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextField(
-                        cursorColor: Colors.black, // Ubah warna kursor menjadi hitam
-                        onChanged: (value) {},
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          border: InputBorder.none,
-                          suffixIcon: Icon(Icons.search, color: Colors.black), // Ubah warna ikon menjadi hitam
-                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: TextField(
+                      cursorHeight: 20,
+                      autofocus: false,
+                      cursorColor: Colors.black, 
+                      onChanged: (value) {},
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        border: InputBorder.none,
+                        suffixIcon: Icon(Icons.search, color: Colors.black), 
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 10), // Tambahkan spasi antara elemen
-                CircleAvatar(
-                  backgroundColor: Colors.grey[200], // Ubah warna latar belakang menjadi abu-abu
-                  radius: 17,
-                  child: Icon(Icons.filter_list, color: Colors.black), // Ubah warna ikon menjadi hitam
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+              SizedBox(width: 10),
+              CircleAvatar(
+                backgroundColor: Colors.white, 
+                radius: 17,
+                child: Icon(Icons.filter_list, color: Colors.black), 
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
