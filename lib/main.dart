@@ -1,6 +1,4 @@
 // ignore_for_file: unused_import
-
-import 'package:apk_barbershop/A.dart';
 import 'package:apk_barbershop/Booking.dart';
 import 'package:apk_barbershop/DetailVoucher.dart';
 import 'package:apk_barbershop/Footer.dart';
@@ -30,7 +28,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:footer(),
+      initialRoute: '/', 
+      routes: {
+      '/': (context) => footer(), 
+        '/Booking': (context) => Booking(),
+        '/Detail_': (context) => Voucher(),
+        '/ECommerceApp': (context) => ECommerceApp(),
+
+       } 
+
     );
   }
   

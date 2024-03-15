@@ -78,6 +78,15 @@ flutter:
     - assets/images/5.jpg
     - assets/images/6.jpg
     - assets/images/7.jpg
+    - assets/prabowo.jpeg
+    - assets/booking_image.png
+    - assets/voucher_image.png
+    - assets/produk_image.png
+    - assets/more_image.png
+    - assets/bg.jpeg
+    - assets/feeds1.jpg
+    - assets/feeds2.jpg
+    - assets/feeds3.jpg
 
     # - images/a_dot_burr.jpeg
     # - images/a_dot_ham.jpeg

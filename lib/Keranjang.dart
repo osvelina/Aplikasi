@@ -21,7 +21,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
 
       body: SingleChildScrollView(
         child: Column(
@@ -175,14 +175,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 }
 
-AppBar buildAppBar() {
+AppBar buildAppBar(BuildContext context) {
   return AppBar(
     backgroundColor: Colors.grey[200],
     elevation: 5,
     leading: IconButton(
       icon: Icon(Icons.arrow_back),
       color: Colors.black,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pop(context);
+      },
     ),
     title: Text(
       'Keranjang',

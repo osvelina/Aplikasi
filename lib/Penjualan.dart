@@ -1,3 +1,4 @@
+import 'package:apk_barbershop/Keranjang.dart';
 import 'package:apk_barbershop/Produk.dart';
 import 'package:flutter/material.dart';
 
@@ -31,15 +32,19 @@ class ECommerceApp extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white), // Warna ikon putih
               onPressed: () {
-                // Aksi yang akan dilakukan saat tombol back ditekan
+                Navigator.pop(context);
               },
             ),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.shopping_cart, color: Colors.white), // Warna ikon putih
                 onPressed: () {
-                  // Aksi yang akan dilakukan saat tombol keranjang belanja ditekan
-                },
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CheckoutPage()),
+                  );
+                    },
+  
               ),
             ],
             flexibleSpace: AppbarBody(), // memanggil isian appbar
