@@ -21,12 +21,20 @@ class _BookingState extends State<Booking> {
     return Scaffold(
       backgroundColor: const Color(0xFF0E2954),
       appBar: AppBar(
+        leading: IconButton(
+        icon: Icon(Icons.arrow_back,
+        size: 28,
+        color:Colors.white,),
+          onPressed: () {
+          Navigator.of(context).pop(); 
+        },
+  ),
         backgroundColor: const Color(0xFF0E2954),
         title: const Text(
           "Hello....",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16.0,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),

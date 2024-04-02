@@ -1,3 +1,4 @@
+import 'package:apk_barbershop/Pembayaran.dart';
 import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -159,20 +160,37 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget _buildCheckoutButton() {
-    return Container(
+  return ElevatedButton(
+    onPressed: () {
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Bayar()),
+    );
+    },
+    style: ElevatedButton.styleFrom(
+      // ignore: deprecated_member_use
+      primary: kapkColor, // Warna latar belakang tombol
+      // ignore: deprecated_member_use
+      onPrimary: Colors.white, // Warna teks
+      elevation: 0, // Set elevasi menjadi 0 untuk menghilangkan bayangan
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10), // Atur radius sudut
+      ),
+    ),
+    child: Container(
       height: 50,
-      color: kapkColor,
       alignment: Alignment.center,
       child: Text(
         'Checkout (\$137.75)',
         style: TextStyle(
-          color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
 
 AppBar buildAppBar(BuildContext context) {

@@ -82,7 +82,9 @@ class ProsesKonten extends StatelessWidget {
               children: [
                 Text('Rp$price'),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    
+                  },
                   child: Text('Detail'),
                 ),
               ],

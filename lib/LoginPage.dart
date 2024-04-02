@@ -1,4 +1,5 @@
 
+import 'package:apk_barbershop/11.dart';
 import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -103,7 +104,13 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 GestureDetector(
-                  child: Text(
+                  onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Register()),
+                  );
+                },
+                        child: Text(
                     'Belum punya akun? Daftar sekarang!',
                     style: TextStyle(
                       fontSize: 16,

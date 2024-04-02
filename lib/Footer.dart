@@ -1,8 +1,7 @@
-// ignore_for_file: duplicate_import
-
 import 'package:apk_barbershop/HomePage.dart';
 import 'package:flutter/material.dart';
 import './Riwayat.dart';
+// ignore: duplicate_import
 import './HomePage.dart';
 import './Profil.dart';
 
@@ -16,7 +15,7 @@ class footer extends StatefulWidget {
 
 class _footerState extends State<footer> {
     int _bottomNavCurrentIndex = 0;
-  List<Widget> _container = [new HomePage(), new Riwayat(), new Profil()];
+  List<Widget> _container = [new HomePage(), new Riwayat(), new Profile()];
 
   @override
   void initState() {
@@ -26,6 +25,8 @@ class _footerState extends State<footer> {
   Widget build(BuildContext context) {
     return new Scaffold(
         body: _container[_bottomNavCurrentIndex],
+        
+        
         bottomNavigationBar: new BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
@@ -36,6 +37,7 @@ class _footerState extends State<footer> {
           currentIndex: _bottomNavCurrentIndex,
           items: [
             BottomNavigationBarItem(
+              
               activeIcon: new Icon(
                 Icons.home_filled,
                 color: Color(0xFF0E2954),

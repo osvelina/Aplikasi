@@ -9,6 +9,12 @@ class Voucher extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF0E2954),
       appBar: AppBar(
+              shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0),
+            ),
+          ),
         backgroundColor: Colors.white,
         title: const Text(
           "Voucher",
@@ -30,13 +36,13 @@ class Voucher extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Detail_(),
-                  ),
-                );
-              },
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Detail_();
+                },
+              );
+            },
               child: ListTile(
                 contentPadding: EdgeInsets.all(8),
                 leading: CircleAvatar(

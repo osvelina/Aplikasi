@@ -1,4 +1,9 @@
 // ignore_for_file: unused_import
+import 'package:apk_barbershop/1.dart';
+import 'package:apk_barbershop/11.dart';
+import 'package:apk_barbershop/EditProfil.dart';
+import 'package:apk_barbershop/Pembayaran.dart';
+import 'package:apk_barbershop/Pertanyaan.dart';
 import 'package:apk_barbershop/Booking.dart';
 import 'package:apk_barbershop/DetailVoucher.dart';
 import 'package:apk_barbershop/Footer.dart';
@@ -30,7 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/', 
       routes: {
-      '/': (context) => footer(), 
+      '/': (context) => footer (), 
         '/Booking': (context) => Booking(),
         '/Detail_': (context) => Voucher(),
         '/ECommerceApp': (context) => ECommerceApp(),

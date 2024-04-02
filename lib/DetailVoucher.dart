@@ -8,7 +8,7 @@ class Detail_ extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       elevation: 0,
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color.fromARGB(0, 19, 18, 18),
       child: contentBox(context),
     );
   }

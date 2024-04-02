@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:apk_barbershop/ProsesKonten.dart';
 import 'package:apk_barbershop/RiwayatKonten.dart';
-import 'package:flutter/material.dart';
 
 class Riwayat extends StatelessWidget {
   const Riwayat({Key? key}) : super(key: key);
@@ -11,49 +11,58 @@ class Riwayat extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Riwayat'),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            'Riwayat',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          centerTitle: true,
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(60.0), // Sesuaikan tinggi sesuai kebutuhan
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), // Mengatur border radius
-                  color: Colors.grey[200], // Mengatur warna latar belakang
-                ),
-                child: TabBar(
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), // Mengatur border radius
-                    color: Colors.greenAccent, // Mengatur warna latar belakang indikator
+            preferredSize: Size.fromHeight(48.0),
+            child: TabBar(
+              indicator: null, 
+              labelColor: const Color(0xFF0E2954),
+              unselectedLabelColor:const Color(0xFF0E2954),
+              tabs: [
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Riwayat',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  indicatorSize: TabBarIndicatorSize.label, // Menyesuaikan lebar indikator dengan label
-                  labelPadding: EdgeInsets.symmetric(horizontal: 8.0), // Menambahkan padding pada label
-                  physics: NeverScrollableScrollPhysics(), // Menghilangkan animasi
-                  tabs: [
-                    _buildTab("Riwayat"),
-                    _buildTab("Proses"),
-                  ],
                 ),
-              ),
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Proses',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
         body: TabBarView(
-          physics: NeverScrollableScrollPhysics(), // Menghilangkan animasi
           children: [
-            RiwayatContent(), // Konten untuk tab Riwayat
-            ProsesContent(), // Konten untuk tab Proses
+            RiwayatContent(),
+            ProsesContent(),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTab(String title) {
-    return Tab(
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(title),
       ),
     );
   }
@@ -69,7 +78,6 @@ class ProsesContent extends StatelessWidget {
 class RiwayatContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RiwayatKonten(
-    );
+    return RiwayatKonten();
   }
 }
