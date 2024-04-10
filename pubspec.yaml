@@ -32,6 +32,9 @@ dependencies:
     sdk: flutter
   dropdown_search: ^3.0.0
   coupon_uikit: ^0.2.1
+  flutter_map: ^6.1.0
+  geolocator: ^7.6.2
+
   # image_picker: ^0.8.4+3
   
 
@@ -89,6 +92,9 @@ flutter:
     - assets/feeds2.jpg
     - assets/feeds3.jpg
     - assets/prabowo.jpeg
+    - assets/Depan.jpg
+    - assets/Daerah.jpg
+    - assets/Terakhir.jpg
 
     # - images/a_dot_burr.jpeg
     # - images/a_dot_ham.jpeg

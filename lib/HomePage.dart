@@ -18,18 +18,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Map> menuFavorites = [
     {
-      'label': 'booking',
+      'label': 'Booking',
     'image': 'assets/booking_image.png',
     'color': Colors.blueGrey, 
     'route': '/Booking', 
     },
 
-    {
-      'label': 'Voucher',
-      'image': 'assets/voucher_image.png',
-      'color': Colors.blueGrey,
-      'route': '/Detail_',
-    },
+    // {
+    //   'label': 'Voucher',
+    //   'image': 'assets/voucher_image.png',
+    //   'color': Colors.blueGrey,
+    //   'route': '/Detail_',
+    // },
     {
       'label': 'Produk',
       'image': 'assets/produk_image.png',
@@ -140,12 +140,12 @@ Widget build(BuildContext context) {
             height: 10,
           ),
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Wrap(
-                  runSpacing: 8,
+                  runSpacing: 10,
                   alignment: WrapAlignment.spaceBetween,
                   children: [
                     for (final menuFavorite in menuFavorites)
@@ -161,19 +161,19 @@ Widget build(BuildContext context) {
                             }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
                                 SizedBox(
-                                  height: 60,
-                                  width: 60,
+                                  height: 70,
+                                  width: 70,
                                   child: Stack(
                                     children: [
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Container(
-                                          height: 60,
-                                          width: 60,
+                                          height: 70,
+                                          width: 70,
                                           decoration: BoxDecoration(
                                             color: menuFavorite['color'].withOpacity(0.4),
                                             borderRadius: BorderRadius.circular(16),
@@ -184,14 +184,18 @@ Widget build(BuildContext context) {
                                         alignment: Alignment.center,
                                         child: Image.asset(
                                           menuFavorite['image'],
-                                          height: 40,
-                                          width: 40,
+                                          height: 45,
+                                          width: 45,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Text(menuFavorite['label'])
+                                Text(menuFavorite['label'],
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Outfit',
+                                ),)
                               ],
                             ),
                           ),
