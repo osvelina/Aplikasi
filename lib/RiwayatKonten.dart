@@ -81,10 +81,10 @@ class RiwayatKonten extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(price),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Detail'),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   child: Text('Detail'),
+                // ),
               ],
             ),
             SizedBox(height: 8),
@@ -155,10 +155,10 @@ class RiwayatKonten extends StatelessWidget {
                     Text(location),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Detail'),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   child: Text('Detail'),
+                // ),
               ],
             ),
           ],
@@ -168,8 +168,4 @@ class RiwayatKonten extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: RiwayatKonten(),
-  ));
-}
+

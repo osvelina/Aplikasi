@@ -92,14 +92,30 @@ Widget build(BuildContext context) {
                 ],
               ),
             ),
-            SizedBox(width: 20), // Tambahkan SizedBox untuk jarak
-            IconButton(
-              onPressed: () {
-                // Tambahkan aksi yang diinginkan di sini
-              },
-              icon: Icon(Icons.notifications_active),
+            SizedBox(width: 20), 
+            Container(
+            decoration: BoxDecoration(
               color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
             ),
+            padding: EdgeInsets.all(3.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.place_outlined,
+                  color: Colors.black, // Ubah warna ikon sesuai kebutuhan Anda
+                ),
+                SizedBox(width: 3.0),
+                Text(
+                  'Sidikalang',
+                  style: TextStyle(
+                    color: Colors.black, 
+                    fontSize: 13.0, 
+                  ),
+                ),
+              ],
+            ),
+          )
           ],
         ),
         bottom: PreferredSize(
