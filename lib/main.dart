@@ -2,7 +2,7 @@
 // import 'package:apk_barbershop/1.dart';
 import 'package:apk_barbershop/Loading.dart';
 import 'package:apk_barbershop/Request.dart';
-import 'package:apk_barbershop/Berhasil.dart';
+import 'package:apk_barbershop/BerhasilDetail.dart';
 import 'package:apk_barbershop/Daerah.dart';
 import 'package:apk_barbershop/Register.dart';
 import 'package:apk_barbershop/EditProfil.dart';
