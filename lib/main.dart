@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
-import 'package:apk_barbershop/1.dart';
+// import 'package:apk_barbershop/1.dart';
+import 'package:apk_barbershop/Loading.dart';
 import 'package:apk_barbershop/Request.dart';
 import 'package:apk_barbershop/Berhasil.dart';
 import 'package:apk_barbershop/Daerah.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
        builder: EasyLoading.init(),
       initialRoute: '/', 
       routes: {
-      '/': (context) => LoadingScreen(), 
+      '/': (context) => footer(), 
         '/Booking': (context) => Booking(),
         '/Detail_': (context) => Voucher(),
         '/ECommerceApp': (context) => ECommerceApp(),

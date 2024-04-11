@@ -1,3 +1,4 @@
+import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 
 class ToPay extends StatelessWidget {
@@ -97,6 +98,25 @@ class ToPay extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  width: double.infinity,
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      "BAYAR",
+                      style: WhiteTextStyle.copyWith(fontSize: 18, fontWeight: bold),
+                    ),
+                  ),
+                ),
+              
             ]
           ),
         ),
