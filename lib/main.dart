@@ -17,7 +17,7 @@ import 'package:apk_barbershop/Penjualan.dart';
 import 'package:apk_barbershop/Percobaan.dart';
 import 'package:apk_barbershop/Profil.dart';
 import 'package:apk_barbershop/Riwayat.dart';
-import 'package:apk_barbershop/ToPay.dart';
+import 'package:apk_barbershop/ToPayDetail.dart';
 import 'package:apk_barbershop/Voucher.dart';
 import 'package:apk_barbershop/Produk.dart';
 import 'package:apk_barbershop/ProductDetail.dart';

@@ -1,6 +1,6 @@
 import 'package:apk_barbershop/BerhasilDetail.dart';
 import 'package:apk_barbershop/Request.dart';
-import 'package:apk_barbershop/ToPay.dart';
+import 'package:apk_barbershop/ToPayDetail.dart';
 import 'package:flutter/material.dart';
 
 class ProsesKonten extends StatelessWidget {
