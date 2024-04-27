@@ -23,10 +23,6 @@ class _PertanyaanState extends State<Pertanyaan> {
              ),
             title: Row(
               children: [
-                Icon(
-                  Icons.arrow_back_rounded,
-                  color: Colors.black,
-                ),
                 SizedBox(width: 60),
                 Text(
                   'Pertanyaan',

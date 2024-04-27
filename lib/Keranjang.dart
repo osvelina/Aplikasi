@@ -118,6 +118,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                   Text('Price: $price'),
                   Text('Quantity: $quantity'),
+                  
                 ],
               ),
             ),

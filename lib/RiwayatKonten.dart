@@ -21,29 +21,36 @@ class RiwayatKonten extends StatelessWidget {
                 status: 'Selesai',
                 title: 'Cukur rambut',
                 date: '24 Desember 2023',
-                price: 'Rp...........',
-              ),
-              SizedBox(height: 30),
-              Text(
-                "PRODUK",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                price: 'Rp 50.000',
               ),
               SizedBox(height: 20),
-              _buildProductPurchaseCard(
-                productName: 'Pomade',
-                date: '24 Desember 2023',
-                location: 'Balige',
-                price: 'Rp...........',
+              _buildBookingCard(
                 status: 'Selesai',
+                title: 'Cat Rambut',
+                date: '30 Desember 2023',
+                price: 'Rp 100.000',
               ),
-              SizedBox(height: 20),
-              _buildProductPurchaseCard(
-                productName: 'Powder Rambut',
-                date: '09 April 2023',
-                location: 'Samosir',
-                price: 'Rp...........',
-                status: 'Dibatalkan',
-              ),
+              // SizedBox(height: 30),
+              // Text(
+              //   "PRODUK",
+              //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              // ),
+              // SizedBox(height: 20),
+              // _buildProductPurchaseCard(
+              //   productName: 'Pomade',
+              //   date: '24 Desember 2023',
+              //   location: 'Balige',
+              //   price: 'Rp...........',
+              //   status: 'Selesai',
+              // ),
+              // SizedBox(height: 20),
+              // _buildProductPurchaseCard(
+              //   productName: 'Powder Rambut',
+              //   date: '09 April 2023',
+              //   location: 'Samosir',
+              //   price: 'Rp...........',
+              //   status: 'Dibatalkan',
+              // ),
             ],
           ),
         ),
@@ -109,63 +116,63 @@ class RiwayatKonten extends StatelessWidget {
     );
   }
 
-  Widget _buildProductPurchaseCard({
-    required String productName,
-    required String date,
-    required String location,
-    required String price,
-    required String status,
-  }) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: status == 'Selesai' ? Colors.green : Colors.red,
-                  ),
-                  child: Text(
-                    status,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      productName,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      date,
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Text(location),
-                  ],
-                ),
-                // ElevatedButton(
-                //   onPressed: () {},
-                //   child: Text('Detail'),
-                // ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+  // Widget _buildProductPurchaseCard({
+  //   required String productName,
+  //   required String date,
+  //   required String location,
+  //   required String price,
+  //   required String status,
+  // }) {
+  //   return Card(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(16.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Row(
+  //             children: [
+  //               Container(
+  //                 padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                   color: status == 'Selesai' ? Colors.green : Colors.red,
+  //                 ),
+  //                 child: Text(
+  //                   status,
+  //                   style: TextStyle(color: Colors.white, fontSize: 10),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           SizedBox(height: 8),
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     productName,
+  //                     style: TextStyle(fontWeight: FontWeight.bold),
+  //                   ),
+  //                   Text(
+  //                     date,
+  //                     style: TextStyle(fontSize: 12),
+  //                   ),
+  //                   Text(location),
+  //                 ],
+  //               ),
+  //               // ElevatedButton(
+  //               //   onPressed: () {},
+  //               //   child: Text('Detail'),
+  //               // ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
   }
-}
+
 
 

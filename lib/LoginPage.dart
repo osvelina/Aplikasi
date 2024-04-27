@@ -16,16 +16,20 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                
                 Text(
-                  "Welcome Back",
-                  style: textTextStyle.copyWith(fontSize: 30, fontWeight: bold),
-                ),
-                SizedBox(height: 11),
-                Text(
-                  "Tugas Akhir Universitas Diponegoro Tahun 2024 harus lulus ga da kata ngga lululs okokokok",
-                  style: textTextStyle.copyWith(fontSize: 12),
+                  "Welcome\nDaeng Barbershop",
+                  style: textTextStyle.copyWith(
+                  fontSize: 30, 
+                  fontWeight: bold),
                   textAlign: TextAlign.center,
                 ),
+                SizedBox(height: 11),
+                // Text(
+                //   "Daeng Barbershop",
+                //   style: textTextStyle.copyWith(fontSize: 12),
+                //   textAlign: TextAlign.center,
+                // ),
                 SizedBox(height: 34),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

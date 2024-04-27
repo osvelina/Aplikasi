@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
@@ -10,21 +11,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadData(context); // Pass context to _loadData method
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData(BuildContext context) async {
     try {
-      // EasyLoading.show(status: 'Loading...'); // Menampilkan loading indicator
-      // // Proses memuat data
       await Future.delayed(Duration(seconds: 3));
-      // Navigasi ke halaman selanjutnya setelah data dimuat
-      Navigator.pushReplacementNamed(context, '/home');
+      // Navigate to the next screen after data loaded
+      Navigator.pushReplacementNamed(context, '/Booking');
     } catch (e) {
-      // Tangani kesalahan jika terjadi
-      EasyLoading.showError('Coba Ulang Sekali Lagi'); // Menampilkan pesan kesalahan
+      // Handle error if any
+      EasyLoading.showError('Try Again'); // Display error message
     } finally {
-      EasyLoading.dismiss(); // Menutup loading indicator setelah proses selesai
+      EasyLoading.dismiss(); // Close loading indicator after process finishes
     }
   }
 
@@ -37,24 +36,24 @@ class _LoadingScreenState extends State<LoadingScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: 100, 
-              width: 100, 
+              height: 100,
+              width: 100,
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white), 
-                strokeWidth: 10, 
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                strokeWidth: 10,
               ),
             ),
             SizedBox(
-              height: 20, 
+              height: 20,
             ),
             Text(
-              'Tunggu Sebentar\nPermintaanmu Sedang Diproses',
+              'Please Wait\nProcessing...', // Display processing message
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'RadioCanada',
                 fontSize: 25,
-                ), // Warna teks putih
+              ),
             ),
           ],
         ),

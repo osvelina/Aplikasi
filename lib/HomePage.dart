@@ -2,7 +2,7 @@
 // ignore_for_file: unused_import
 
 import 'package:apk_barbershop/Booking.dart';
-import 'package:apk_barbershop/Card%20Homepage.dart';
+import 'package:apk_barbershop/Konten.dart';
 import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,13 +31,13 @@ class _HomePageState extends State<HomePage> {
     //   'route': '/Detail_',
     // },
     {
-      'label': 'Produk',
+      'label': 'Layanan',
       'image': 'assets/produk_image.png',
       'color': Colors.blueGrey,
       'route':'/ECommerceApp',
     },
     {
-      'label': 'More',
+      'label': 'Wilayah',
       'image': 'assets/more_image.png',
       'color': Colors.blueGrey
     },

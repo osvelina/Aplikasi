@@ -80,7 +80,7 @@ class Profile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Richie Lorie",
+                        "Daniel Matanari",
                         style: Theme.of(context)
                             .textTheme
                             // ignore: deprecated_member_use
@@ -183,7 +183,7 @@ class Profile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
       child: InkWell(
         onTap: () {
-          // Aksi yang ingin diambil ketika item diklik
+         
         },
         child: Container(
           padding: EdgeInsets.all(12),

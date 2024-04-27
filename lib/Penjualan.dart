@@ -1,9 +1,16 @@
+// ignore_for_file: unused_import
+
 import 'package:apk_barbershop/Keranjang.dart';
 import 'package:apk_barbershop/Produk.dart';
 import 'package:flutter/material.dart';
 
 class ECommerceApp extends StatelessWidget {
+  
   const ECommerceApp({Key? key}) : super(key: key);
+
+
+  
+ 
   
   @override
   Widget build(BuildContext context) {
@@ -35,34 +42,69 @@ class ECommerceApp extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.shopping_cart, color: Colors.white), // Warna ikon putih
-                onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CheckoutPage()),
-                  );
-                    },
-  
-              ),
-            ],
-            flexibleSpace: AppbarBody(), // memanggil isian appbar
+           
+            flexibleSpace: AppbarBody(), 
           ),
         ),
       ),
-     body: Produk(
-     imagePaths: [
-    'assets/images/1.jpg',
-    'assets/images/2.jpg',
-    'assets/images/3.jpg',
-    'assets/images/4.jpg',
-    'assets/images/5.jpg',
-    'assets/images/6.jpg',
-    'assets/images/7.jpg',
-  ],
-),
-
+      body: Produk(
+        ProdukInfo: [
+            Info(
+            imagePath: 'assets/images/potong_rambut.jpg',
+            title: 'Potong Rambut',
+            shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product  yang ditampilkan di halaman detail.',
+          ),
+          Info(
+            imagePath: 'assets/images/anak.jpg',
+            title: 'Potong Rambut Anak',
+           shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product yang ditampilkan di halaman detail.',
+          ),
+         Info(
+            imagePath: 'assets/images/cat_hitam.jpg',
+            title: 'Cat Rambut Hitam',
+           shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product  yang ditampilkan di halaman detail.',
+          ),
+           Info(
+            imagePath: 'assets/images/cat_rambut.jpg',
+            title: 'Cat Warna Bleaching 1',
+            shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product  yang ditampilkan di halaman detail.',
+          ),
+          Info(
+            imagePath: 'assets/images/cat_rambut.jpg',
+            title: 'Cat Warna Bleaching 2',
+            shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product  yang ditampilkan di halaman detail.',
+          ),
+          Info(
+            imagePath: 'assets/images/creambath.jpg',
+            title: 'Hair Creambath',
+           shortDescription: 'Deskripsi singkat untuk Product 1',
+            fullDescription: 'Deskripsi lengkap untuk Product 1 yang ditampilkan di halaman detail.',
+          ),
+            Info(
+            imagePath: 'assets/images/cuci_rambut.jpg',
+            title: 'Cuci Rambut',
+            shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product yang ditampilkan di halaman detail.',
+          ),
+            Info(
+            imagePath: 'assets/images/cukur.jpg',
+            title: 'Cukur',
+            shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product  yang ditampilkan di halaman detail.',
+          ),
+            Info(
+            imagePath: 'assets/images/facial.jpg',
+            title: 'Facial Wajah',
+           shortDescription: 'Deskripsi singkat untuk Product ',
+            fullDescription: 'Deskripsi lengkap untuk Product  yang ditampilkan di halaman detail.',
+          ),
+        ],
+      ),
     );
   }
 }
@@ -79,7 +121,7 @@ class AppbarBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            "Find your, \nFavorite Items!",
+            "Find your, \nFavorite Treatments !",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 27,
