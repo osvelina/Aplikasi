@@ -103,6 +103,9 @@ flutter:
     - assets/Depan.jpg
     - assets/Daerah.jpg
     - assets/Terakhir.jpg
+    - assets/balige.jpeg
+    - assets/parapat.jpg
+    - assets/sidikalang.jpg
 
     # - images/a_dot_burr.jpeg
     # - images/a_dot_ham.jpeg

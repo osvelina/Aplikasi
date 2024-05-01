@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
        builder: EasyLoading.init(),
       initialRoute: '/', 
       routes: {
-      '/': (context) =>PointsPage(), 
+      '/': (context) => ECommerceApp(), 
         '/Booking': (context) => Booking(),
         '/Detail_': (context) => Voucher(),
         '/ECommerceApp': (context) => ECommerceApp(),

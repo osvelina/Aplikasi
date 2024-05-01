@@ -14,9 +14,10 @@ class Area {
 
 class AreaList extends StatelessWidget {
   final List<Area> areas = [
-    Area(name: 'Mountain', imageUrl: 'assets/feeds1.jpg', daerah:'Balige'),
-    Area(name: 'Beach', imageUrl: 'assets/feeds1.jpg', daerah:'Parapat'), 
-    Area(name: 'City', imageUrl: 'assets/feeds1.jpg', daerah:'Medan'),
+    Area(name: 'Daeng Barbershop Balige', imageUrl: 'assets/balige.jpeg', daerah:'Balige'),
+    Area(name: 'Daeng Barbershop Parapat', imageUrl: 'assets/parapat.jpg', daerah:'Parapat'), 
+    Area(name: 'Daeng Barbershop Sidikalang', imageUrl: 'assets/sidikalang.jpg', daerah:'Sidikalang'),
+    
   ];
 
   @override
