@@ -37,20 +37,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-       builder: EasyLoading.init(),
-      initialRoute: '/', 
-      routes: {
-      '/': (context) => ECommerceApp(), 
-        '/Booking': (context) => Booking(),
-        '/Detail_': (context) => Voucher(),
-        '/ECommerceApp': (context) => ECommerceApp(),
-
-       } 
-
-    );
+        debugShowCheckedModeBanner: false,
+        builder: EasyLoading.init(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => LoginPage(),
+          '/Booking': (context) => Booking(),
+          '/Detail_': (context) => Voucher(),
+          '/ECommerceApp': (context) => ECommerceApp(),
+          '/login': (context) => LoginPage(), // Tambahkan rute '/login'
+        });
   }
-  
-  
-
 }

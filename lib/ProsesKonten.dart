@@ -1,127 +1,93 @@
 import 'package:apk_barbershop/BerhasilDetail.dart';
 import 'package:apk_barbershop/Request.dart';
 import 'package:flutter/material.dart';
+import 'ToPayDetail.dart';
+import 'api_controller.dart'; // Import ApiController
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProsesKonten extends StatelessWidget {
+class ProsesKonten extends StatefulWidget {
   const ProsesKonten({Key? key}) : super(key: key);
+
+  @override
+  _ProsesKontenState createState() => _ProsesKontenState();
+}
+
+class _ProsesKontenState extends State<ProsesKonten> {
+  final ApiController _apiController = ApiController();
+  List<Map<String, dynamic>> _bookings = [];
+  List<Map<String, dynamic>> jasaProducts = [];
+  bool _isLoading = true;
+  String _errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookingProses();
+  }
+
+  Future<void> _loadBookingProses() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final accessToken = prefs.getString('access_token');
+      final userId = prefs.getInt('userId');
+      final selectedLocationId = prefs.getInt('id_lokasi');
+      // final serviceName = prefs.getString('nama');
+
+      if (accessToken == null || userId == null || selectedLocationId == null) {
+        throw Exception("Access token, user ID, or location ID is null");
+      }
+
+      final bookings =
+          await _apiController.getBookingProses(userId, selectedLocationId);
+      setState(() {
+        _bookings = bookings;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to load booking history: $e';
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                "BOOKING",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              _buildBookingCard(
-                title: 'Cukur rambut',
-                date: '24 Desember 2023',
-                price: 50000,
-                status: 'Request', 
-                onTapPay: null, 
-                onTapDetail: () { 
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Request()),
-                  );
-                 },
-              ),
-              SizedBox(height: 20),
-              _buildBookingCard(
-                title: 'Cat Rambut',
-                date: '24 Desember 2023',
-                price: 50000,
-                status: 'BOOKING', 
-                onTapPay: null,
-                 onTapDetail: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Berhasil()),
-                  );
-                },
-              ),
-              SizedBox(height: 20),
-              _buildBookingCard(
-                title: 'Style Rambut',
-                date: '24 Desember 2023',
-                price: 50000,
-                status: 'Menunggu Pembayaran', 
-                onTapPay: () {
-                  //  Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ToPay()),
-                  // );
-                  }, 
-                onTapDetail: null,
-              ),
-              // SizedBox(height: 30),
-              // Text(
-              //   "PRODUK",
-              //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              // ),
-              // SizedBox(height: 20),
-              // _buildProductPurchaseCard(
-              //   status: 'Menunggu Pembayaran',
-              //   products: ['Pomade Clay'],
-              //   date: '01 Desember 2023',
-              //   location: 'Balige',
-              //   price: 120000,
-              //   onTapPay: () {
-                  
-              //     print('Pembayaran ditekan');
-              //   },
-              //   onTapDetail: null, 
-              //   onTapGet: null,   
-              // ),
-              // SizedBox(height: 20),
-              // _buildProductPurchaseCard(
-              //   status: 'Proses',
-              //   products: ['Powder Rambut'],
-              //   date: '09 April 2023',
-              //   location: 'Samosir',
-              //   price: 75000,
-              //   onTapPay: null,    
-              //   onTapDetail: () {
-                  
-              //     print('Detail ditekan');
-              //   },
-              //   onTapGet: null,    
-              // ),
-              //  SizedBox(height: 20),
-              // _buildProductPurchaseCard(
-              //   status: 'Proses',
-              //   products: ['Powder Rambut'],
-              //   date: '09 April 2023',
-              //   location: 'Samosir',
-              //   price: 75000,
-              //   onTapPay: null,    
-              //   onTapDetail: null,
-              //   onTapGet: () {
-              //     print('Terima Pesanan ditekan');
-              //   }   
-              // ),
-              // SizedBox(height: 20),
-           
-            ],
-          ),
-        ),
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : _errorMessage.isNotEmpty
+              ? Center(child: Text(_errorMessage))
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "BOOKING",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 20),
+                        ..._bookings.map((booking) => _buildProsesCard(
+                              layanan: booking['layanan'],
+                              status: booking['status'],
+                              date: booking['tanggal_booking'],
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
     );
   }
 
-  Widget _buildBookingCard({
-    required String title,
-    required String date,
-    required int price,
+  Widget _buildProsesCard({
+    required String layanan,
     required String status,
-    required VoidCallback? onTapPay,
-    required VoidCallback? onTapDetail,
+    required String date,
+    // required VoidCallback? onTapPay,
+    // required VoidCallback? onTapDetail,
   }) {
     return Card(
       child: Padding(
@@ -149,7 +115,7 @@ class ProsesKonten extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  title,
+                  layanan,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -162,20 +128,14 @@ class ProsesKonten extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Rp$price'),
-                if (onTapPay != null)
-                  ElevatedButton(
-                    onPressed: onTapPay,
-                    child: Text('Pembayaran'),
-                  ),
-                if (onTapDetail != null) SizedBox(width: 8),
-                if (onTapDetail != null)
-                  ElevatedButton(
-                    onPressed: onTapDetail,
-                    child: Text('Detail'),
-                  ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Detail'),
+                ),
               ],
             ),
+            SizedBox(height: 8),
           ],
         ),
       ),
@@ -184,92 +144,16 @@ class ProsesKonten extends StatelessWidget {
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'Request':
-        return Colors.yellow;
-      case 'BOOKING':
-        return Colors.green;
-      case 'Proses':
-        return Colors.purple;
+      case 'request':
+        return Color.fromARGB(255, 146, 133, 14);
+      case 'confirmed':
+        return const Color.fromARGB(255, 63, 150, 66);
+      case 'reserved':
+        return const Color.fromARGB(255, 123, 33, 139);
       case 'Menunggu Pembayaran':
-        return Colors.blue;
+        return const Color.fromARGB(255, 37, 112, 173);
       default:
         return Colors.black;
     }
   }
-
-  // Widget _buildProductPurchaseCard({
-  //   required String status,
-  //   required List<String> products,
-  //   required String date,
-  //   required String location,
-  //   required int price,
-  //   required VoidCallback? onTapPay,
-  //   required VoidCallback? onTapDetail,
-  //   required VoidCallback? onTapGet,
-  // }) {
-  //   return Card(
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(16.0),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Row(
-  //             children: [
-  //               Container(
-  //                 padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-  //                 decoration: BoxDecoration(
-  //                   borderRadius: BorderRadius.circular(10),
-  //                   color: _getStatusColor(status),
-  //                 ),
-  //                 child: Text(
-  //                   status,
-  //                   style: TextStyle(color: Colors.white, fontSize: 10),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           SizedBox(height: 8),
-  //           Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               for (var product in products)
-  //                 Text(
-  //                   product,
-  //                   style: TextStyle(fontWeight: FontWeight.bold),
-  //                   overflow: TextOverflow.ellipsis,
-  //                   maxLines: 1,
-  //                 ),
-  //               Text(date, style: TextStyle(fontSize: 12)),
-  //               Text(location),
-  //             ],
-  //           ),
-  //           SizedBox(height: 8),
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.end,
-  //             children: [
-  //               if (onTapPay != null)
-  //                 ElevatedButton(
-  //                   onPressed: onTapPay,
-  //                   child: Text('Pembayaran'),
-  //                 ),
-  //               if (onTapDetail != null) SizedBox(width: 8),
-  //               if (onTapDetail != null)
-  //                 ElevatedButton(
-  //                   onPressed: onTapDetail,
-  //                   child: Text('Detail'),
-  //                 ),
-  //               if (onTapGet != null) SizedBox(width: 8),
-  //               if (onTapGet != null)
-  //                 ElevatedButton(
-  //                   onPressed: onTapGet,
-  //                   child: Text('Terima Pesanan'),
-  //                 ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }
-

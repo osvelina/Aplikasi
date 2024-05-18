@@ -14,10 +14,18 @@ class Area {
 
 class AreaList extends StatelessWidget {
   final List<Area> areas = [
-    Area(name: 'Daeng Barbershop Balige', imageUrl: 'assets/balige.jpeg', daerah:'Balige'),
-    Area(name: 'Daeng Barbershop Parapat', imageUrl: 'assets/parapat.jpg', daerah:'Parapat'), 
-    Area(name: 'Daeng Barbershop Sidikalang', imageUrl: 'assets/sidikalang.jpg', daerah:'Sidikalang'),
-    
+    Area(
+        name: 'Daeng Barbershop Balige',
+        imageUrl: 'assets/balige.jpeg',
+        daerah: 'Balige'),
+    Area(
+        name: 'Daeng Barbershop Parapat',
+        imageUrl: 'assets/parapat.jpg',
+        daerah: 'Parapat'),
+    Area(
+        name: 'Daeng Barbershop Sidikalang',
+        imageUrl: 'assets/sidikalang.jpg',
+        daerah: 'Sidikalang'),
   ];
 
   @override
@@ -31,17 +39,15 @@ class AreaList extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('Daerah Barbershop',
-        style: TextStyle(
-          fontFamily: 'Quicksand',
-          fontSize: 23,
-
-        ),),
+        title: Text(
+          'Daerah Barbershop',
+          style: TextStyle(
+            fontFamily: 'Quicksand',
+            fontSize: 23,
+          ),
+        ),
       ),
-      
-      
       body: ListView.builder(
-
         itemCount: areas.length,
         itemBuilder: (context, index) {
           final area = areas[index];
@@ -81,9 +87,8 @@ class AreaList extends StatelessWidget {
                       children: [
                         Text(
                           area.name,
-                          style: TextStyle(fontSize: 18,
-                          fontWeight: FontWeight.bold
-                          ),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 20),
                         Row(
@@ -96,8 +101,7 @@ class AreaList extends StatelessWidget {
                             SizedBox(width: 5),
                             Text(
                               area.daerah,
-                              style: TextStyle(
-                                fontSize: 14),
+                              style: TextStyle(fontSize: 14),
                             ),
                           ],
                         ),

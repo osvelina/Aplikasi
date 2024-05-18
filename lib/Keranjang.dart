@@ -23,7 +23,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-
       body: SingleChildScrollView(
         child: Column(
           children: productCheckboxes.keys.map((String imageUrl) {
@@ -77,7 +76,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
     required Function(bool?) onCheckboxChanged,
   }) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 8), // Atur padding kiri dan atas
+      padding:
+          const EdgeInsets.fromLTRB(8, 8, 8, 8), // Atur padding kiri dan atas
       child: Container(
         width: double.infinity,
         height: 100,
@@ -92,7 +92,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               onChanged: onCheckboxChanged,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0), // Atur padding kiri gambar
+              padding:
+                  const EdgeInsets.only(left: 8.0), // Atur padding kiri gambar
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
@@ -118,7 +119,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                   Text('Price: $price'),
                   Text('Quantity: $quantity'),
-                  
                 ],
               ),
             ),
@@ -161,37 +161,36 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget _buildCheckoutButton() {
-  return ElevatedButton(
-    onPressed: () {
-      Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Bayar()),
-    );
-    },
-    style: ElevatedButton.styleFrom(
-      // ignore: deprecated_member_use
-      primary: kapkColor, // Warna latar belakang tombol
-      // ignore: deprecated_member_use
-      onPrimary: Colors.white, // Warna teks
-      elevation: 0, // Set elevasi menjadi 0 untuk menghilangkan bayangan
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Atur radius sudut
-      ),
-    ),
-    child: Container(
-      height: 50,
-      alignment: Alignment.center,
-      child: Text(
-        'Checkout (\$137.75)',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Bayar()),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        // // ignore: deprecated_member_use
+        // primary: kapkColor, // Warna latar belakang tombol
+        // // ignore: deprecated_member_use
+        // onPrimary: Colors.white, // Warna teks
+        elevation: 0, // Set elevasi menjadi 0 untuk menghilangkan bayangan
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Atur radius sudut
         ),
       ),
-    ),
-  );
-}
-
+      child: Container(
+        height: 50,
+        alignment: Alignment.center,
+        child: Text(
+          'Checkout (\$137.75)',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 AppBar buildAppBar(BuildContext context) {

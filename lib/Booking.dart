@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'api_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Footer.dart';
 
 class Booking extends StatefulWidget {
   const Booking({Key? key}) : super(key: key);
@@ -10,9 +13,28 @@ class Booking extends StatefulWidget {
 class _BookingState extends State<Booking> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
-  List<String> selectedServices = [];
+  String? selectedServiceName; //tambahan
+  int? selectedService; // Ubah tipe data selectedService menjadi int?
+  List<Map<String, dynamic>> jasaProducts = [];
+  final ApiController _apiController = ApiController();
 
-  List<String> services = ['Cukur Rambut', 'Chat Rambut', 'Creambath', 'Massage'];
+  @override
+  void initState() {
+    super.initState();
+    _loadJasaProducts();
+  }
+
+  Future<void> _loadJasaProducts() async {
+    try {
+      List<Map<String, dynamic>> products =
+          await _apiController.getJasaProducts();
+      setState(() {
+        jasaProducts = products;
+      });
+    } catch (e) {
+      print("Failed to load services: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,20 +85,90 @@ class _BookingState extends State<Booking> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildDateTimePicker("Pilih Tanggal :", Icons.calendar_today),
-                    const SizedBox(height: 15.0),
-                    _buildDateTimePicker("Pilih Waktu :", Icons.access_time),
+                    _buildDateTimePicker(
+                        "Pilih Jadwal :", Icons.calendar_today),
                     const SizedBox(height: 15.0),
                     _buildServicesPicker(),
                     const SizedBox(height: 15.0),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Tambahkan fungsi yang sesuai ketika tombol ditekan
+                        onPressed: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          final selectedLocationId = prefs.getInt('id_lokasi');
+
+                          if (selectedDate != null &&
+                              selectedService != null &&
+                              selectedServiceName != null && //tambahan
+                              selectedLocationId != null) {
+                            try {
+                              final userId =
+                                  await SharedPreferences.getInstance()
+                                      .then((prefs) => prefs.getInt('userId'));
+                              final accessToken =
+                                  await _apiController.getToken();
+                              if (accessToken == null) {
+                                print('Access token not found');
+                                return;
+                              }
+
+                              if (userId == null) {
+                                throw Exception("User ID is null");
+                              }
+
+                              // Print the values before calling bookAppointment
+                              print('selectedDate: $selectedDate');
+                              print('selectedService: $selectedService');
+                              print('userId: $userId');
+                              print('locationId: $selectedLocationId');
+
+                              await _apiController.bookAppointment(
+                                context,
+                                selectedDate!,
+                                selectedService!,
+                                userId,
+                                selectedLocationId,
+                                // selectedServiceName!,
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Success"),
+                                    content: Text(
+                                        "Book berhasil, menunggu konfirmasi server"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Footer()),
+                                            (route) => false,
+                                          );
+                                        },
+                                        child: Text("OK"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } catch (e) {
+                              // Print the error to the console
+                              print('Error: $e');
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Failed to book "),
+                              ));
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Please fill all fields"),
+                            ));
+                          }
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: const Color(0xFF0E2954),
-                          onPrimary: Colors.white,
                           elevation: 10.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -114,27 +206,34 @@ class _BookingState extends State<Booking> {
         const SizedBox(width: 8.0),
         OutlinedButton(
           onPressed: () async {
-            DateTime? pickedDate;
-            TimeOfDay? pickedTime;
+            DateTime? pickedDateTime;
             if (icon == Icons.calendar_today) {
-              pickedDate = await showDatePicker(
+              final pickedDate = await showDatePicker(
                 context: context,
                 initialDate: selectedDate ?? DateTime.now(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2040),
               );
-            } else {
-              pickedTime = await showTimePicker(
-                context: context,
-                initialTime: selectedTime ?? TimeOfDay.now(),
-              );
+              if (pickedDate != null) {
+                final pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: selectedTime ?? TimeOfDay.now(),
+                );
+                if (pickedTime != null) {
+                  pickedDateTime = DateTime(
+                    pickedDate.year,
+                    pickedDate.month,
+                    pickedDate.day,
+                    pickedTime.hour,
+                    pickedTime.minute,
+                  );
+                }
+              }
             }
 
-            if ((pickedDate != null && pickedDate != selectedDate) ||
-                (pickedTime != null && pickedTime != selectedTime)) {
+            if (pickedDateTime != null && pickedDateTime != selectedDate) {
               setState(() {
-                selectedDate = pickedDate ?? selectedDate;
-                selectedTime = pickedTime ?? selectedTime;
+                selectedDate = pickedDateTime;
               });
             }
           },
@@ -147,11 +246,9 @@ class _BookingState extends State<Booking> {
               ),
               const SizedBox(width: 8.0),
               Text(
-                (icon == Icons.calendar_today && selectedDate != null)
-                    ? ' ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
-                    : (icon == Icons.access_time && selectedTime != null)
-                        ? ' ${selectedTime!.hour}:${selectedTime!.minute}'
-                        : '__ : __',
+                (selectedDate != null)
+                    ? ' ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year} ${selectedDate!.hour}:${selectedDate!.minute}'
+                    : '__ : __',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0,
@@ -180,27 +277,32 @@ class _BookingState extends State<Booking> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
-            children: services.map((service) {
+            children: jasaProducts.map((product) {
+              final serviceName = product['nama'];
+              final productId = product['id_produk'];
+
+              // Pastikan ini sesuai dengan struktur data dari API
               return Card(
-                color: selectedServices.contains(service) ? const Color(0xFF0E2954) : null,
+                color: selectedService == productId
+                    ? const Color(0xFF0E2954)
+                    : null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 margin: const EdgeInsets.only(bottom: 5),
                 child: ListTile(
                   title: Text(
-                    service,
+                    serviceName,
                     style: TextStyle(
-                      color: selectedServices.contains(service) ? Colors.white : Colors.black,
+                      color: selectedService == productId
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                   onTap: () {
                     setState(() {
-                      if (selectedServices.contains(service)) {
-                        selectedServices.remove(service);
-                      } else {
-                        selectedServices.add(service);
-                      }
+                      selectedService = productId;
+                      selectedServiceName = serviceName; //tambahan
                     });
                   },
                 ),
