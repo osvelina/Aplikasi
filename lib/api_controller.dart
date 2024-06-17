@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'package:apk_barbershop/Booking.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +14,8 @@ class ApiController {
         validateStatus: (status) {
           return status! < 500;
         },
-        connectTimeout: Duration(milliseconds: 15000), // 15s
-        receiveTimeout: Duration(milliseconds: 5000), // 5s
+        connectTimeout: Duration(milliseconds: 30000),
+        receiveTimeout: Duration(milliseconds: 5000),
       ),
     );
   }
@@ -65,7 +66,7 @@ class ApiController {
       );
 
       return response.data;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response != null) {
         print('Received invalid status code: ${e.response?.statusCode}');
       } else {
@@ -213,6 +214,7 @@ class ApiController {
       final accessToken = prefs.getString('access_token');
       final idUser = prefs.getInt('id_user');
       final selectedLocationId = prefs.getInt('id_lokasi');
+      // final bookingID = prefs.getInt('id_booking');
 
       if (accessToken == null) {
         throw Exception("Access token is null");
@@ -244,8 +246,7 @@ class ApiController {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getBookingHistory(
-      int userId, int locationId) async {
+  Future<List<Map<String, dynamic>>> getBookingHistory(int userId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final accessToken = prefs.getString('access_token');
@@ -263,7 +264,6 @@ class ApiController {
         ),
         queryParameters: {
           'id_user': userId,
-          'id_lokasi': locationId,
         },
       );
 
@@ -271,8 +271,11 @@ class ApiController {
         List<dynamic> responseBody = response.data['bookings'];
         return List<Map<String, dynamic>>.from(responseBody.map((booking) {
           return {
-            'layanan':
-                booking['nama'] ?? 'Layanan tidak tersedia', // Tangani null
+            'id_booking': booking['id_booking'],
+            'nama_produk': booking['produk']['nama'] ??
+                'Nama tidak tersedia', // Tangani null
+            'harga_produk': booking['produk']['harga']?.toString() ??
+                'Harga tidak tersedia', // Tangani null
             'status': booking['status'],
             'tanggal_booking': booking['tanggal_booking'],
           };
@@ -286,8 +289,7 @@ class ApiController {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getBookingProses(
-      int userId, int locationId) async {
+  Future<List<Map<String, dynamic>>> getBookingProcess(int userId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final accessToken = prefs.getString('access_token');
@@ -305,7 +307,6 @@ class ApiController {
         ),
         queryParameters: {
           'id_user': userId,
-          'id_lokasi': locationId,
         },
       );
 
@@ -313,18 +314,83 @@ class ApiController {
         List<dynamic> responseBody = response.data['bookings'];
         return List<Map<String, dynamic>>.from(responseBody.map((booking) {
           return {
-            'layanan':
-                booking['nama'] ?? 'Layanan tidak tersedia', // Tangani null
+            'id_booking': booking['id_booking'],
+            'nama_produk': booking['produk']['nama'] ??
+                'Nama tidak tersedia', // Tangani null
+            'harga_produk': booking['produk']['harga']?.toString() ??
+                'Harga tidak tersedia', // Tangani null
             'status': booking['status'],
             'tanggal_booking': booking['tanggal_booking'],
           };
         }));
       } else {
         throw Exception(
-            'Failed to load booking history: ${response.statusCode}');
+            'Failed to load booking process: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to load booking history: $e');
+      throw Exception('Failed to load booking process: $e');
+    }
+  }
+
+  Future<String?> redirectToPayment(int bookingId) async {
+    final url = 'http://10.0.2.2:8000/api/redirectToPayment/$bookingId';
+
+    try {
+      final response = await _dio.get(url);
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        return responseData['redirect_url'];
+      } else {
+        throw Exception('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
+
+  Future<void> updateProfile({
+    required String name,
+    required String noTelp,
+    required DateTime tanggalLahir,
+    required String alamat,
+    // required String email,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final accessToken = prefs.getString('access_token');
+
+      if (accessToken == null) {
+        throw Exception("Access token is null");
+      }
+
+      final data = {
+        'name': name,
+        'no_telp': noTelp,
+        'tanggal_lahir': tanggalLahir.toString(),
+        'alamat': alamat,
+        // 'email': email,
+      };
+
+      final response = await _dio.put(
+        'http://10.0.2.2:8000/api/updatecustomers',
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response data: ${response.data}');
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update profile');
+      }
+    } catch (e) {
+      print('Error updating profile: $e');
+      throw e;
     }
   }
 

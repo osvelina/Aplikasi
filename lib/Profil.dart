@@ -94,7 +94,7 @@ class Profile extends StatelessWidget {
                               userInfo['userName'] ?? '',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .titleLarge
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             ElevatedButton(

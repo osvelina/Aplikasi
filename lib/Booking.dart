@@ -13,15 +13,17 @@ class Booking extends StatefulWidget {
 class _BookingState extends State<Booking> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
-  String? selectedServiceName; //tambahan
-  int? selectedService; // Ubah tipe data selectedService menjadi int?
+  String? selectedServiceName;
+  int? selectedService;
   List<Map<String, dynamic>> jasaProducts = [];
   final ApiController _apiController = ApiController();
+  String? userName;
 
   @override
   void initState() {
     super.initState();
     _loadJasaProducts();
+    _loadUserName();
   }
 
   Future<void> _loadJasaProducts() async {
@@ -34,6 +36,14 @@ class _BookingState extends State<Booking> {
     } catch (e) {
       print("Failed to load services: $e");
     }
+  }
+
+  Future<void> _loadUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName =
+          prefs.getString('userName') ?? "User"; // Default name if not found
+    });
   }
 
   @override
@@ -52,9 +62,9 @@ class _BookingState extends State<Booking> {
           },
         ),
         backgroundColor: const Color(0xFF0E2954),
-        title: const Text(
-          "Hello....",
-          style: TextStyle(
+        title: Text(
+          "Hello $userName",
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -98,7 +108,7 @@ class _BookingState extends State<Booking> {
 
                           if (selectedDate != null &&
                               selectedService != null &&
-                              selectedServiceName != null && //tambahan
+                              selectedServiceName != null &&
                               selectedLocationId != null) {
                             try {
                               final userId =
@@ -127,7 +137,6 @@ class _BookingState extends State<Booking> {
                                 selectedService!,
                                 userId,
                                 selectedLocationId,
-                                // selectedServiceName!,
                               );
 
                               showDialog(
@@ -302,7 +311,7 @@ class _BookingState extends State<Booking> {
                   onTap: () {
                     setState(() {
                       selectedService = productId;
-                      selectedServiceName = serviceName; //tambahan
+                      selectedServiceName = serviceName;
                     });
                   },
                 ),

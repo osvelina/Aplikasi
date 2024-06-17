@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Berhasil extends StatelessWidget {
+  final String namaProduk;
+  final String hargaProduk;
+  final String date;
+
+  Berhasil({
+    required this.namaProduk,
+    required this.hargaProduk,
+    required this.date,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +25,6 @@ class Berhasil extends StatelessWidget {
           },
         ),
       ),
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -23,16 +32,19 @@ class Berhasil extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TransactionSuccessIcon(),
-              ],
-            ),
-
-            SizedBox(height: 10),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TransactionSuccessIcon(),
+                ],
+              ),
+              SizedBox(height: 10),
               Text(
-                "Pembelian Berhasil",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green[500]),
+                "Pembayaran Berhasil",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green[500],
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24),
@@ -42,26 +54,17 @@ class Berhasil extends StatelessWidget {
                   color: Colors.grey[50],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30.10 ),
+                  padding: const EdgeInsets.all(30.10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "CODE BOOKING",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "No. ANTRIAN",
-                        style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-                      ),
-                      Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Cukur Rambut",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            namaProduk,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -70,25 +73,27 @@ class Berhasil extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Tanggal Booking ",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            "Tanggal Booking",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "24 Desember 2023",
+                            date,
                             style: TextStyle(fontSize: 14),
                           ),
                         ],
                       ),
-                       SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "Harga",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Rp 50.000",
+                            hargaProduk,
                             style: TextStyle(fontSize: 14),
                           ),
                         ],
@@ -97,7 +102,7 @@ class Berhasil extends StatelessWidget {
                   ),
                 ),
               ),
-            ]
+            ],
           ),
         ),
       ),

@@ -15,6 +15,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final ApiController _apiController = ApiController();
+  bool _isHidden = true;
+
+  void _toggleVisibility() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +74,15 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: TextField(
                       controller: _passwordController,
+                      obscureText: _isHidden,
+                      decoration: InputDecoration(
+                        suffix: InkWell(
+                          onTap: _toggleVisibility,
+                          child: Icon(
+                            _isHidden ? Icons.visibility : Icons.visibility_off,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -101,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                       print('Login response: $response');
                       // Jika login berhasil, navigasi ke Daerah
-                      if (response != null) {
+                      if (response.containsKey('access_token')) {
                         print('Login successful, navigating to Daerah');
                         Navigator.pushReplacement(
                           context,

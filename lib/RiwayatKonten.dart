@@ -26,14 +26,12 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
       final prefs = await SharedPreferences.getInstance();
       final accessToken = prefs.getString('access_token');
       final userId = prefs.getInt('userId');
-      final selectedLocationId = prefs.getInt('id_lokasi');
 
-      if (accessToken == null || userId == null || selectedLocationId == null) {
-        throw Exception("Access token, user ID, or location ID is null");
+      if (accessToken == null || userId == null) {
+        throw Exception("Access token or user ID is null");
       }
 
-      final bookings =
-          await _apiController.getBookingHistory(userId, selectedLocationId);
+      final bookings = await _apiController.getBookingHistory(userId);
       setState(() {
         _bookings = bookings;
         _isLoading = false;
@@ -66,7 +64,8 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
                         ),
                         SizedBox(height: 20),
                         ..._bookings.map((booking) => _buildRiwayatCard(
-                              layanan: booking['layanan'],
+                              namaProduk: booking['nama_produk'],
+                              hargaProduk: booking['harga_produk'],
                               status: booking['status'],
                               date: booking['tanggal_booking'],
                             )),
@@ -78,7 +77,8 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
   }
 
   Widget _buildRiwayatCard({
-    required String layanan,
+    required String namaProduk,
+    required String hargaProduk,
     required String status,
     required String date,
   }) {
@@ -98,7 +98,7 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
                   ),
                   child: Text(
                     status,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),
               ],
@@ -108,7 +108,7 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  layanan,
+                  namaProduk,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -118,15 +118,14 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
               ],
             ),
             SizedBox(height: 8),
+            Text(
+              'Harga: $hargaProduk',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Detail'),
-                ),
-              ],
+              //
             ),
             SizedBox(height: 8),
           ],
@@ -143,8 +142,6 @@ class _RiwayatKontenState extends State<RiwayatKonten> {
         return const Color.fromARGB(255, 63, 150, 66);
       case 'rejected':
         return const Color.fromARGB(255, 123, 33, 139);
-      case 'Menunggu Pembayaran':
-        return const Color.fromARGB(255, 37, 112, 173);
       default:
         return Colors.black;
     }

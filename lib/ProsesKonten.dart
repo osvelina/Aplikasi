@@ -1,9 +1,9 @@
-import 'package:apk_barbershop/BerhasilDetail.dart';
-import 'package:apk_barbershop/Request.dart';
 import 'package:flutter/material.dart';
-import 'ToPayDetail.dart';
-import 'api_controller.dart'; // Import ApiController
 import 'package:shared_preferences/shared_preferences.dart';
+import 'api_controller.dart';
+import 'BerhasilDetail.dart';
+import 'Request.dart';
+import 'ToPayDetail.dart';
 
 class ProsesKonten extends StatefulWidget {
   const ProsesKonten({Key? key}) : super(key: key);
@@ -15,7 +15,6 @@ class ProsesKonten extends StatefulWidget {
 class _ProsesKontenState extends State<ProsesKonten> {
   final ApiController _apiController = ApiController();
   List<Map<String, dynamic>> _bookings = [];
-  List<Map<String, dynamic>> jasaProducts = [];
   bool _isLoading = true;
   String _errorMessage = '';
 
@@ -30,22 +29,19 @@ class _ProsesKontenState extends State<ProsesKonten> {
       final prefs = await SharedPreferences.getInstance();
       final accessToken = prefs.getString('access_token');
       final userId = prefs.getInt('userId');
-      final selectedLocationId = prefs.getInt('id_lokasi');
-      // final serviceName = prefs.getString('nama');
 
-      if (accessToken == null || userId == null || selectedLocationId == null) {
-        throw Exception("Access token, user ID, or location ID is null");
+      if (accessToken == null || userId == null) {
+        throw Exception("Access token or user ID is null");
       }
 
-      final bookings =
-          await _apiController.getBookingProses(userId, selectedLocationId);
+      final bookings = await _apiController.getBookingProcess(userId);
       setState(() {
         _bookings = bookings;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to load booking history: $e';
+        _errorMessage = 'Failed to load booking process: $e';
         _isLoading = false;
       });
     }
@@ -71,9 +67,11 @@ class _ProsesKontenState extends State<ProsesKonten> {
                         ),
                         SizedBox(height: 20),
                         ..._bookings.map((booking) => _buildProsesCard(
-                              layanan: booking['layanan'],
+                              namaProduk: booking['nama_produk'],
+                              hargaProduk: booking['harga_produk'],
                               status: booking['status'],
                               date: booking['tanggal_booking'],
+                              bookingId: booking['id_booking'],
                             )),
                       ],
                     ),
@@ -83,12 +81,28 @@ class _ProsesKontenState extends State<ProsesKonten> {
   }
 
   Widget _buildProsesCard({
-    required String layanan,
+    required String namaProduk,
+    required String hargaProduk,
     required String status,
     required String date,
-    // required VoidCallback? onTapPay,
-    // required VoidCallback? onTapDetail,
+    required int bookingId,
   }) {
+    String statusMessage;
+    switch (status) {
+      case 'request':
+        statusMessage = 'Menunggu konfirmasi server';
+        break;
+      case 'confirmed':
+        statusMessage = 'Segera lakukan pembayaran';
+        break;
+      case 'reserved':
+        statusMessage = 'Segera datang ke barbershop';
+        break;
+      default:
+        statusMessage = '';
+        break;
+    }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -105,7 +119,7 @@ class _ProsesKontenState extends State<ProsesKonten> {
                   ),
                   child: Text(
                     status,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),
               ],
@@ -115,7 +129,7 @@ class _ProsesKontenState extends State<ProsesKonten> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  layanan,
+                  namaProduk,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -125,14 +139,71 @@ class _ProsesKontenState extends State<ProsesKonten> {
               ],
             ),
             SizedBox(height: 8),
+            Text(
+              'Harga: $hargaProduk',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Detail'),
+                Expanded(
+                  child: Text(
+                    statusMessage,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
                 ),
+                if (status == 'request')
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Request(
+                                  namaProduk: namaProduk,
+                                  hargaProduk: hargaProduk,
+                                  date: date,
+                                )),
+                      );
+                    },
+                    child: Text('Detail'),
+                  )
+                else if (status == 'confirmed')
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ToPay(
+                                  bookingId: bookingId,
+                                  namaProduk: namaProduk,
+                                  hargaProduk: hargaProduk,
+                                  date: date,
+                                )),
+                      );
+                    },
+                    child: Text('Pembayaran'),
+                  )
+                else if (status == 'reserved')
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Berhasil(
+                                  namaProduk: namaProduk,
+                                  hargaProduk: hargaProduk,
+                                  date: date,
+                                )),
+                      );
+                    },
+                    child: Text('Detail'),
+                  ),
               ],
             ),
             SizedBox(height: 8),
@@ -147,11 +218,9 @@ class _ProsesKontenState extends State<ProsesKonten> {
       case 'request':
         return Color.fromARGB(255, 146, 133, 14);
       case 'confirmed':
-        return const Color.fromARGB(255, 63, 150, 66);
-      case 'reserved':
         return const Color.fromARGB(255, 123, 33, 139);
-      case 'Menunggu Pembayaran':
-        return const Color.fromARGB(255, 37, 112, 173);
+      case 'reserved':
+        return const Color.fromARGB(255, 63, 150, 66);
       default:
         return Colors.black;
     }

@@ -12,7 +12,7 @@ class Daerah extends StatefulWidget {
 
 class _DaerahState extends State<Daerah> {
   late String _selectedCity = '';
-  late int _selectedLocationId;
+  // late int _selectedLocationId;
   late List<Map<String, dynamic>> _locations = [];
   late List<String> _locationNames = [];
   final ApiController _apiController = ApiController();

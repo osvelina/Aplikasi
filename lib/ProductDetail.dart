@@ -16,7 +16,7 @@ class ProductDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: buildAppBar(context),
+      appBar: buildAppBar(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -33,7 +33,6 @@ class ProductDetail extends StatelessWidget {
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10),
                     ),
-                    
                     child: Image.asset(
                       imagePath,
                       fit: BoxFit.cover,
@@ -97,7 +96,7 @@ class ProductDetail extends StatelessWidget {
     );
   }
 
-   AppBar buildAppBar(BuildContext context) { 
+  AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: kapkColor,
       elevation: 5,

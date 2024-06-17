@@ -14,7 +14,7 @@ import 'package:apk_barbershop/DetailVoucher.dart';
 import 'package:apk_barbershop/Footer.dart';
 import 'package:apk_barbershop/HomePage.dart';
 import 'package:apk_barbershop/LoginPage.dart';
-import 'package:apk_barbershop/Penjualan.dart';
+import 'package:apk_barbershop/Layanan.dart';
 import 'package:apk_barbershop/Profil.dart';
 import 'package:apk_barbershop/Riwayat.dart';
 import 'package:apk_barbershop/ToPayDetail.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => LoginPage(),
           '/Booking': (context) => Booking(),
-          '/Detail_': (context) => Voucher(),
+          '/AreaList': (context) => AreaList(),
           '/ECommerceApp': (context) => ECommerceApp(),
           '/login': (context) => LoginPage(), // Tambahkan rute '/login'
         });

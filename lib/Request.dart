@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Request extends StatelessWidget {
+  final String namaProduk;
+  final String hargaProduk;
+  final String date;
+
+  Request({
+    required this.namaProduk,
+    required this.hargaProduk,
+    required this.date,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +25,6 @@ class Request extends StatelessWidget {
           },
         ),
       ),
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -23,16 +32,18 @@ class Request extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RequestIcon(),
-              ],
-            ),
-
-            SizedBox(height: 10),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RequestIcon(),
+                ],
+              ),
+              SizedBox(height: 10),
               Text(
                 "Permintaan Diproses",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.green),
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24),
@@ -42,26 +53,17 @@ class Request extends StatelessWidget {
                   color: Colors.grey[50],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30.10 ),
+                  padding: const EdgeInsets.all(30.10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "CODE BOOKING",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "No. ANTRIAN",
-                        style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-                      ),
-                      Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Cukur Rambut",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            namaProduk,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -70,25 +72,27 @@ class Request extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Tanggal Booking ",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            "Tanggal Booking",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "24 Desember 2023",
+                            date,
                             style: TextStyle(fontSize: 14),
                           ),
                         ],
                       ),
-                       SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "Harga",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Rp 50.000",
+                            hargaProduk,
                             style: TextStyle(fontSize: 14),
                           ),
                         ],
@@ -97,7 +101,7 @@ class Request extends StatelessWidget {
                   ),
                 ),
               ),
-            ]
+            ],
           ),
         ),
       ),
@@ -109,7 +113,7 @@ class RequestIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-     Icons.add_circle,
+      Icons.add_circle,
       color: Colors.green,
       size: 70.0,
     );

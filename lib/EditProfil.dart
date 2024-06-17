@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'api_controller.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -9,7 +10,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _NoTLPController = TextEditingController();
   TextEditingController _TanggallahirController = TextEditingController();
-  TextEditingController _JeniskelaminController = TextEditingController();
+  TextEditingController _alamatController = TextEditingController();
+  // TextEditingController _emailController = TextEditingController();
+
+  final ApiController _apiController = ApiController();
+
+  Future<void> _showSuccessDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button to close dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Profile updated successfully'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); // Navigate back to profile page
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +52,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           flexibleSpace: _TopPortion(),
         ),
       ),
-      body: SingleChildScrollView( // Tambahkan SingleChildScrollView
+      body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -43,24 +75,44 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               SizedBox(height: 16.0),
               TextField(
-                controller: _JeniskelaminController,
-                decoration: InputDecoration(labelText: 'Jenis Kelamin'),
+                controller: _alamatController,
+                decoration: InputDecoration(labelText: 'Alamat'),
               ),
+              // SizedBox(height: 16.0),
+              // TextField(
+              //   controller: _emailController,
+              //   decoration: InputDecoration(labelText: 'Email'),
+              // ),
               SizedBox(height: 32.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0E2954),
-                    ),
-                onPressed: () {
-                  // Implement save logic here
-                  // You can access the entered data via _nameController.text, _emailController.text, _phoneNumberController.text
+                  backgroundColor: Color(0xFF0E2954),
+                ),
+                onPressed: () async {
+                  try {
+                    await _apiController.updateProfile(
+                      name: _nameController.text,
+                      noTelp: _NoTLPController.text,
+                      tanggalLahir:
+                          DateTime.parse(_TanggallahirController.text),
+                      alamat: _alamatController.text,
+                      // email: _emailController.text,
+                    );
+                    // Jika berhasil
+                    _showSuccessDialog();
+                  } catch (e) {
+                    // Jika gagal
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to update profile')),
+                    );
+                  }
                 },
                 child: Text(
-                'UBAH',
-                style: TextStyle(
-                  fontFamily: 'RadioCanada',
-                  color: Colors.white,
-                ),
+                  'UBAH',
+                  style: TextStyle(
+                    fontFamily: 'RadioCanada',
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
