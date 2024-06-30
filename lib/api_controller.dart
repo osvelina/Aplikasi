@@ -118,6 +118,10 @@ class ApiController {
         print('User gender di APICont: $gender');
         await prefs.setString('gender', gender ?? '');
 
+        final point = responseData['user']['point'] as String?;
+        print('User point di APICont: $point');
+        await prefs.setString('point', point ?? '');
+
         final selectedLocationName =
             responseData['user']['nama_lokasi'] as String?;
         print('User lokasi di APICont: $selectedLocationName');
@@ -336,11 +340,26 @@ class ApiController {
     final url = 'http://10.0.2.2:8000/api/redirectToPayment/$bookingId';
 
     try {
-      final response = await _dio.get(url);
+      final response = await _dio.get(
+        url,
+        options: Options(
+          followRedirects: false, // Set to false to handle redirects manually
+          validateStatus: (status) {
+            return status != null && status < 500;
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
-        return responseData['redirect_url'];
+        if (responseData is Map<String, dynamic> &&
+            responseData.containsKey('redirect_url')) {
+          return responseData['redirect_url'];
+        } else {
+          throw Exception('Unexpected response format');
+        }
+      } else if (response.statusCode == 302) {
+        return response.headers['location']?.first;
       } else {
         throw Exception('Error: ${response.statusCode}');
       }

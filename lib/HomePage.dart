@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final String? userName; // Properti userName
+  final String? userName;
   const HomePage({Key? key, required this.userName}) : super(key: key);
 
   @override
@@ -11,8 +11,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String? userName; // Tambahkan variabel userName
-  String? locationName; // Variabel untuk menyimpan nama lokasi
+  String? userName;
+  String? locationName;
+  String? point;
 
   final List<Map> menuFavorites = [
     {
@@ -38,15 +39,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _getUserName(); // Panggil fungsi _getUserName saat initState
-    _getLocationName(); // Panggil fungsi _getLocationName saat initState
+    _getUserName();
+    _getLocationName();
+    _getPoint();
   }
 
   Future<void> _getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      userName =
-          prefs.getString('userName'); // Ambil userName dari SharedPreferences
+      userName = prefs.getString('userName');
     });
   }
 
@@ -54,6 +55,13 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       locationName = prefs.getString('selectedLocationName');
+    });
+  }
+
+  Future<void> _getPoint() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      point = prefs.getString('point');
     });
   }
 
@@ -84,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hallo ${widget.userName ?? ''} ", // Gunakan userName yang sudah didapatkan
+                        "Hallo ${widget.userName ?? ''}",
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -93,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "Selamat Datang !",
+                        "Selamat Datang!",
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.bold,
                           fontSize: 23,
@@ -105,10 +113,11 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Point: 100 ", // Tampilkan "Point: "
+                            "Point: ${point ?? '0'}",
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 18,
                             ),
                           ),
                           SizedBox(width: 10),
@@ -126,8 +135,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 SizedBox(width: 3.0),
                                 Text(
-                                  locationName ??
-                                      '', // Tampilkan lokasi yang dipilih
+                                  locationName ?? '',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 8.0,
@@ -231,7 +239,9 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       "Spesial Untuk Kamu",
                       style: GoogleFonts.montserrat(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   );
                 } else if (index == 2) {
@@ -255,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                 }
                 return null;
               },
-              childCount: 5, // Jumlah total item dalam list
+              childCount: 5,
             ),
           ),
         ],
@@ -279,8 +289,7 @@ class HomePage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-          vertical: 8.0), // Jarak vertikal antara setiap card
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
         width: double.infinity,
         height: 250,
@@ -299,8 +308,7 @@ class HomePage2 extends StatelessWidget {
                   ),
                   elevation: 5,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment
-                        .start, // Tambahkan ini agar teks sejajar ke kiri
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                         width: double.infinity,
@@ -309,14 +317,12 @@ class HomePage2 extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0), // Tambahkan padding
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .start, // Pastikan teks di dalam kolom ini juga sejajar kiri
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              namevocher, // Ganti dengan nama toko
+                              namevocher,
                               style: GoogleFonts.montserrat(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
@@ -324,7 +330,7 @@ class HomePage2 extends StatelessWidget {
                             ),
                             SizedBox(height: 2),
                             Text(
-                              description, // Ganti dengan deskripsi
+                              description,
                               style: GoogleFonts.montserrat(
                                 fontSize: 10,
                               ),

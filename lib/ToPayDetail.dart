@@ -1,12 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:apk_barbershop/api_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:apk_barbershop/api_controller.dart';
 
 class ToPay extends StatelessWidget {
   final int bookingId;
   final String namaProduk;
   final String hargaProduk;
   final String date;
+  final ApiController apiController = ApiController();
 
   ToPay({
     required this.bookingId,
@@ -14,8 +16,6 @@ class ToPay extends StatelessWidget {
     required this.hargaProduk,
     required this.date,
   });
-
-  final ApiController apiController = ApiController();
 
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
@@ -35,6 +35,24 @@ class ToPay extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _redirectToPayment(BuildContext context) async {
+    try {
+      final url = await apiController.redirectToPayment(bookingId);
+      if (url != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentWebView(url: url),
+          ),
+        );
+      } else {
+        _showErrorDialog(context, 'Failed to get payment URL.');
+      }
+    } catch (e) {
+      _showErrorDialog(context, 'An error occurred: $e');
+    }
   }
 
   @override
@@ -135,22 +153,21 @@ class ToPay extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              // Uncomment this section if the payment function is implemented
-              // Container(
-              //   width: double.infinity,
-              //   height: 50,
-              //   margin: EdgeInsets.symmetric(horizontal: 20),
-              //   child: ElevatedButton(
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.blue,
-              //     ),
-              //     onPressed: () => _redirectToPayment(context),
-              //     child: Text(
-              //       "BAYAR",
-              //       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              //     ),
-              //   ),
-              // ),
+              Container(
+                width: double.infinity,
+                height: 50,
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  onPressed: () => _redirectToPayment(context),
+                  child: Text(
+                    "BAYAR",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -170,22 +187,35 @@ class TransactionSuccessIcon extends StatelessWidget {
   }
 }
 
-// Uncomment this class if the payment function is implemented
-// class PaymentWebView extends StatelessWidget {
-//   final String url;
+class PaymentWebView extends StatefulWidget {
+  final String url;
 
-//   PaymentWebView({required this.url});
+  PaymentWebView({required this.url});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Pembayaran'),
-//       ),
-//       body: WebView(
-//         initialUrl: url,
-//         javascriptMode: JavascriptMode.unrestricted,
-//       ),
-//     );
-//   }
-// }
+  @override
+  _PaymentWebViewState createState() => _PaymentWebViewState();
+}
+
+class _PaymentWebViewState extends State<PaymentWebView> {
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) {
+      // Setting up WebView platform for Android
+      WebView.platform = SurfaceAndroidWebView();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pembayaran'),
+      ),
+      body: WebView(
+        initialUrl: widget.url,
+        javascriptMode: JavascriptMode.unrestricted,
+      ),
+    );
+  }
+}
