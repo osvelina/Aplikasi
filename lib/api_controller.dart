@@ -1,7 +1,9 @@
 import 'dart:convert';
 // import 'package:apk_barbershop/Booking.dart';
+import 'package:apk_barbershop/Produk.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiController {
@@ -130,12 +132,26 @@ class ApiController {
 
         return responseData;
       } else {
-        throw Exception('Invalid response format');
+        _showErrorToast('Password atau email yang anda masukkan salah');
+        throw Exception('Password atau email yang anda masukkan salah');
       }
     } catch (e) {
-      print('Error occurred during login: $e');
+      _showErrorToast('Error occurred during login');
+      print(
+          'Error occurred during login: $e'); // Tambahkan informasi lebih lanjut tentang kesalahan
       throw e;
     }
+  }
+
+  void _showErrorToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   Future<List<Map<String, dynamic>>> getJasaProducts() async {
@@ -166,6 +182,109 @@ class ApiController {
       throw Exception('Failed to load services: $e');
     }
   }
+
+  // Fungsi untuk mengambil produk berdasarkan jenis
+  // Future<List<Map<String, dynamic>>> getProdukByJenis() async {
+  //   try {
+  //     Response response =
+  //         await _dio.get('http://10.0.2.2:8000/api/produk/jenis');
+
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> responseBody = response.data;
+
+  //       print('Data received from API: $responseBody'); // Debugging
+
+  //       List<Map<String, dynamic>> filteredProduk = [];
+
+  //       if (responseBody.containsKey('data')) {
+  //         Map<String, dynamic> data = responseBody['data'];
+
+  //         // Filter produk by 'jenisproduk' to include only 'jasa' and 'barang'
+  //         if (data.containsKey('jasa')) {
+  //           filteredProduk.addAll((data['jasa'] as List<dynamic>)
+  //               .map((item) => item as Map<String, dynamic>));
+  //         }
+
+  //         if (data.containsKey('barang')) {
+  //           filteredProduk.addAll((data['barang'] as List<dynamic>)
+  //               .map((item) => item as Map<String, dynamic>));
+  //         }
+  //       } else {
+  //         print('Unexpected data format: $responseBody');
+  //         throw Exception('Data key not found in API response');
+  //       }
+
+  //       print('Filtered products: $filteredProduk'); // Debugging
+
+  //       return filteredProduk;
+  //     } else {
+  //       String errorMessage =
+  //           'Unexpected status code: ${response.statusCode}. Response: ${response.data}';
+  //       print('Error: $errorMessage');
+  //       throw Exception('Failed to load data from API: $errorMessage');
+  //     }
+  //   } catch (e) {
+  //     print('Error in getProdukByJenis: $e');
+  //     throw Exception('Failed to load products by jenis: $e');
+  //   }
+  // }
+  Future<List<Info>> getProdukByJenis() async {
+    try {
+      Response response =
+          await Dio().get('http://10.0.2.2:8000/api/produk/jenis');
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody = response.data;
+
+        List<Info> produkList = [];
+
+        if (responseBody.containsKey('data')) {
+          Map<String, dynamic> data = responseBody['data'];
+
+          if (data.containsKey('jasa')) {
+            produkList.addAll(
+              (data['jasa'] as List<dynamic>).map(
+                (item) => Info(
+                  gambar: item['gambar']?.toString() ?? '',
+                  nama: item['nama']?.toString() ?? '',
+                  harga: item['harga']?.toString() ?? '',
+                  deskripsi: item['deskripsi']?.toString() ?? '',
+                ),
+              ),
+            );
+          }
+
+          if (data.containsKey('barang')) {
+            produkList.addAll(
+              (data['barang'] as List<dynamic>).map(
+                (item) => Info(
+                  gambar: item['gambar']?.toString() ?? '',
+                  nama: item['nama']?.toString() ?? '',
+                  harga: item['harga']?.toString() ?? '',
+                  deskripsi: item['deskripsi']?.toString() ?? '',
+                ),
+              ),
+            );
+          }
+        } else {
+          print('Unexpected data format: $responseBody');
+          throw Exception('Data key not found in API response');
+        }
+
+        return produkList;
+      } else {
+        String errorMessage =
+            'Unexpected status code: ${response.statusCode}. Response: ${response.data}';
+        print('Error: $errorMessage');
+        throw Exception('Failed to load data from API: $errorMessage');
+      }
+    } catch (e) {
+      print('Error in getProdukByJenis: $e');
+      throw Exception('Failed to load products by jenis: $e');
+    }
+  }
+
+//location
 
   Future<List<Map<String, dynamic>>> getLocations() async {
     try {
@@ -421,5 +540,28 @@ class ApiController {
   Future logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
+  }
+
+  Future<List<Map<String, dynamic>>> getContents() async {
+    try {
+      final response = await _dio.get('http://10.0.2.2:8000/api/contents');
+
+      if (response.statusCode == 200) {
+        List<dynamic> contents = response.data['data'];
+        return contents.map((content) {
+          return {
+            'id': content['id'],
+            'title': content['title'],
+            'description': content['description'],
+            'image_path': content['image_path'] ?? '',
+            'expiry_date': content['expiry_date'],
+          };
+        }).toList();
+      } else {
+        throw Exception('Failed to load contents');
+      }
+    } catch (e) {
+      throw Exception('Error fetching contents: $e');
+    }
   }
 }

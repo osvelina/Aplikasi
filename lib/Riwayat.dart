@@ -13,6 +13,7 @@ class Riwayat extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          leading: SizedBox.shrink(),
           title: Text(
             'Riwayat',
             style: TextStyle(
@@ -25,9 +26,9 @@ class Riwayat extends StatelessWidget {
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(48.0),
             child: TabBar(
-              indicator: null, 
+              indicator: null,
               labelColor: const Color(0xFF0E2954),
-              unselectedLabelColor:const Color(0xFF0E2954),
+              unselectedLabelColor: const Color(0xFF0E2954),
               tabs: [
                 Tab(
                   child: Align(

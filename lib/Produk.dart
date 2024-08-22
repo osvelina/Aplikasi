@@ -1,5 +1,5 @@
-import 'package:apk_barbershop/ProductDetail.dart';
 import 'package:flutter/material.dart';
+import 'package:apk_barbershop/ProductDetail.dart';
 
 class Produk extends StatelessWidget {
   final List<Info> ProdukInfo;
@@ -23,9 +23,9 @@ class Produk extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ProductDetail(
-                  imagePath: ProdukInfo[index].imagePath,
-                  title: ProdukInfo[index].title,
-                  fullDescription: ProdukInfo[index].fullDescription,
+                  gambar: ProdukInfo[index].gambar,
+                  nama: ProdukInfo[index].nama,
+                  deskripsi: ProdukInfo[index].deskripsi,
                 ),
               ),
             );
@@ -45,10 +45,14 @@ class Produk extends StatelessWidget {
               children: [
                 Container(
                   margin: EdgeInsets.only(bottom: 8),
-                  child: Image.asset(
-                    ProdukInfo[index].imagePath,
+                  child: Image.network(
+                    ProdukInfo[index].gambar,
                     height: 130,
                     width: 150,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.error, color: Colors.red);
+                    },
                   ),
                 ),
                 Container(
@@ -57,7 +61,7 @@ class Produk extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        ProdukInfo[index].title,
+                        ProdukInfo[index].nama,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -67,7 +71,7 @@ class Produk extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        ProdukInfo[index].shortDescription,
+                        ProdukInfo[index].harga,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 15,
@@ -77,7 +81,6 @@ class Produk extends StatelessWidget {
                     ],
                   ),
                 )
-
               ],
             ),
           ),
@@ -88,19 +91,15 @@ class Produk extends StatelessWidget {
 }
 
 class Info {
-  final String imagePath;
-  final String title;
-  final String shortDescription;
-  final String fullDescription;
-  
+  final String gambar;
+  final String nama;
+  final String deskripsi;
+  final String harga;
 
   Info({
-    required this.imagePath,
-    required this.title,
-    required this.shortDescription,
-    required this.fullDescription,
-    
+    required this.gambar,
+    required this.nama,
+    required this.deskripsi,
+    required this.harga,
   });
 }
-
-

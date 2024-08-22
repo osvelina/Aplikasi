@@ -130,6 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                       print('Error occurred: $e');
                       // Handle error here
                     }
+                    _emailController.clear();
+                    _passwordController.clear();
                   },
                   child: Text(
                     "LOGIN",

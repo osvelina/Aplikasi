@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'api_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomePage extends StatefulWidget {
   final String? userName;
@@ -14,6 +16,9 @@ class _HomePageState extends State<HomePage> {
   String? userName;
   String? locationName;
   String? point;
+  List<Map<String, dynamic>> _contents = [];
+  bool _isLoading = true;
+  String? _errorMessage;
 
   final List<Map> menuFavorites = [
     {
@@ -42,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     _getUserName();
     _getLocationName();
     _getPoint();
+    _fetchContents();
   }
 
   Future<void> _getUserName() async {
@@ -65,6 +71,37 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _fetchContents() async {
+    try {
+      print('Fetching contents...');
+      ApiController apiController = ApiController();
+      List<Map<String, dynamic>> contents = await apiController.getContents();
+      print('Contents retrieved: $contents');
+      setState(() {
+        _contents = contents.map((content) {
+          String imageUrl = content['image_path'].isNotEmpty
+              ? content['image_path']
+              : 'http://10.0.2.2:8000/assets/feeds1.jpg';
+          return {
+            ...content,
+            'image_path': CachedNetworkImage(
+              imageUrl: imageUrl,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+          };
+        }).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching contents: $e');
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +111,7 @@ class _HomePageState extends State<HomePage> {
           SliverAppBar(
             expandedHeight: 180.0,
             pinned: true,
+            leading: SizedBox.shrink(),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
@@ -244,28 +282,27 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   );
-                } else if (index == 2) {
-                  return HomePage2(
-                    imagePath: "assets/feeds1.jpg",
-                    namevocher: "BARBERKU",
-                    description: "Dapatkan promo ini !!",
-                  );
-                } else if (index == 3) {
-                  return HomePage2(
-                    imagePath: "assets/feeds2.jpg",
-                    namevocher: "BARBERKU",
-                    description: "Dapatkan promo ini !!",
-                  );
-                } else if (index == 4) {
-                  return HomePage2(
-                    imagePath: "assets/feeds3.jpg",
-                    namevocher: "BARBERKU",
-                    description: "Dapatkan promo ini !!",
-                  );
+                } else {
+                  if (_isLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (_errorMessage != null) {
+                    return Center(child: Text('Error: $_errorMessage'));
+                  }
+                  if (index - 2 < _contents.length) {
+                    final content = _contents[index - 2];
+                    return HomePage2(
+                      imagePath: 'http://10.0.2.2:8000${content['image_path']}',
+                      title: content['title'],
+                      description: content['description'],
+                    );
+                  } else {
+                    return Center(child: Text('No content available'));
+                  }
                 }
-                return null;
               },
-              childCount: 5,
+              childCount:
+                  2 + _contents.length, // 2 untuk item statis + konten dari API
             ),
           ),
         ],
@@ -276,13 +313,13 @@ class _HomePageState extends State<HomePage> {
 
 class HomePage2 extends StatelessWidget {
   final String imagePath;
-  final String namevocher;
+  final String title;
   final String description;
 
   const HomePage2({
     Key? key,
     required this.imagePath,
-    required this.namevocher,
+    required this.title,
     required this.description,
   }) : super(key: key);
 
@@ -310,34 +347,43 @@ class HomePage2 extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      Image.network(
+                        imagePath,
+                        height: 140,
                         width: double.infinity,
-                        height: 150,
-                        child: Image.asset(imagePath, fit: BoxFit.cover),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/feeds2.jpg',
+                            height: 140,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                       SizedBox(height: 10),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              namevocher,
-                              style: GoogleFonts.montserrat(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              description,
-                              style: GoogleFonts.montserrat(
-                                fontSize: 10,
-                              ),
-                            ),
-                          ],
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
+                      SizedBox(height: 5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black.withOpacity(0.6),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
                     ],
                   ),
                 ),

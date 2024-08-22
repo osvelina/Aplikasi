@@ -25,6 +25,7 @@ class Profile extends StatelessWidget {
                 SliverAppBar(
                   expandedHeight: 190,
                   pinned: true,
+                  automaticallyImplyLeading: false,
                   flexibleSpace: Stack(
                     children: [
                       Container(

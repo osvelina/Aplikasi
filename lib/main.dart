@@ -1,6 +1,6 @@
 // ignore_for_file: unused_import
 import 'package:apk_barbershop/1.dart';
-import 'package:apk_barbershop/11.dart';
+import 'package:apk_barbershop/wilayah.dart';
 import 'package:apk_barbershop/Loading.dart';
 import 'package:apk_barbershop/Request.dart';
 import 'package:apk_barbershop/BerhasilDetail.dart';

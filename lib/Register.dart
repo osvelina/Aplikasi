@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:apk_barbershop/api_controller.dart';
 import 'package:apk_barbershop/LoginPage.dart';
+import 'package:flutter/services.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -20,6 +23,24 @@ class _RegisterState extends State<Register> {
   final _genderController = TextEditingController();
   final _addressController = TextEditingController();
   final _apiController = ApiController(); // instantiate ApiController
+
+  final _phoneFocusNode = FocusNode();
+  String _phoneHint = 'Phone Number'; // Default hint text
+  @override
+  void initState() {
+    super.initState();
+    _phoneFocusNode.addListener(() {
+      if (_phoneFocusNode.hasFocus) {
+        setState(() {
+          _phoneHint = '0800-0000-0000'; // Show formatted hint when focused
+        });
+      } else {
+        setState(() {
+          _phoneHint = 'Phone Number'; // Reset hint when unfocused
+        });
+      }
+    });
+  }
 
   void _register() async {
     try {
@@ -54,6 +75,19 @@ class _RegisterState extends State<Register> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _phoneController.dispose();
+    _birthDateController.dispose();
+    _genderController.dispose();
+    _addressController.dispose();
+    _phoneFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,16 +99,20 @@ class _RegisterState extends State<Register> {
             fontFamily: 'RadioCanada',
           ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0), // Mengatur jarak padding
+          child: IconButton(
+            icon: Icon(Icons.arrow_back_ios,
+                size: 24.0), // Menyesuaikan ukuran icon
+            color: Colors.black,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 80, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -133,6 +171,12 @@ class _RegisterState extends State<Register> {
               SizedBox(height: 20),
               TextFormField(
                 controller: _phoneController,
+                focusNode: _phoneFocusNode,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  _PhoneNumberFormatter(),
+                ],
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xffE5E5E5),
@@ -140,7 +184,7 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
                   ),
-                  hintText: 'Phone Number',
+                  hintText: _phoneHint,
                 ),
               ),
               SizedBox(height: 20),
@@ -219,6 +263,27 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final buffer = StringBuffer();
+
+    // Masukkan karakter format sesuai panjang string
+    if (text.length > 0) buffer.write(text.substring(0, min(text.length, 4)));
+    if (text.length > 4)
+      buffer.write('-${text.substring(4, min(text.length, 8))}');
+    if (text.length > 8)
+      buffer.write('-${text.substring(8, min(text.length, 12))}');
+
+    return newValue.copyWith(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
     );
   }
 }

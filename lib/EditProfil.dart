@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'api_controller.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -14,6 +15,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
   // TextEditingController _emailController = TextEditingController();
 
   final ApiController _apiController = ApiController();
+
+  final _phoneFocusNode = FocusNode();
+  String _phoneHint = 'Phone Number'; // Default hint text
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneFocusNode.addListener(() {
+      if (_phoneFocusNode.hasFocus) {
+        if (_phoneHint != '0800-0000-0000') {
+          setState(() {
+            _phoneHint = '0800-0000-0000'; // Format hint saat fokus
+          });
+        }
+      } else {
+        if (_phoneHint != 'Phone Number') {
+          setState(() {
+            _phoneHint = 'Phone Number'; // Reset hint saat tidak fokus
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _NoTLPController.dispose();
+    _TanggallahirController.dispose();
+    _alamatController.dispose();
+    _phoneFocusNode.dispose();
+    super.dispose();
+  }
 
   Future<void> _showSuccessDialog() async {
     return showDialog<void>(
@@ -49,6 +83,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(250),
         child: AppBar(
+          automaticallyImplyLeading: false,
           flexibleSpace: _TopPortion(),
         ),
       ),
@@ -66,7 +101,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(height: 16.0),
               TextField(
                 controller: _NoTLPController,
-                decoration: InputDecoration(labelText: 'No Telepon'),
+                focusNode: _phoneFocusNode,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  _PhoneNumberFormatter(), // Gunakan formatter yang sama
+                ],
+                decoration: InputDecoration(
+                  labelText: 'No Telepon',
+                  hintText: _phoneHint,
+                ),
               ),
               SizedBox(height: 16.0),
               TextField(
@@ -181,5 +225,27 @@ class _TopPortion extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final formatted = _formatPhoneNumber(digitsOnly);
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
+  String _formatPhoneNumber(String digits) {
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6)
+      return '${digits.substring(0, 3)}-${digits.substring(3)}';
+    return '${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6)}';
   }
 }

@@ -2,15 +2,15 @@ import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String fullDescription;
+  final String gambar;
+  final String nama;
+  final String deskripsi;
 
   const ProductDetail({
     Key? key,
-    required this.imagePath,
-    required this.title,
-    required this.fullDescription,
+    required this.gambar,
+    required this.nama,
+    required this.deskripsi,
   }) : super(key: key);
 
   @override
@@ -27,15 +27,13 @@ class ProductDetail extends StatelessWidget {
               children: [
                 Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    child: Image.asset(
-                      imagePath,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: Image.network(
+                      gambar,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.error, color: Colors.red);
+                      },
                     ),
                   ),
                 ),
@@ -66,7 +64,7 @@ class ProductDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        title,
+                        nama,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -81,7 +79,7 @@ class ProductDetail extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    fullDescription,
+                    deskripsi,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -100,12 +98,15 @@ class ProductDetail extends StatelessWidget {
     return AppBar(
       backgroundColor: kapkColor,
       elevation: 5,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        color: Colors.white,
-        onPressed: () {
-          Navigator.pop(context);
-        },
+      leading: Align(
+        alignment: Alignment.centerLeft,
+        child: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
