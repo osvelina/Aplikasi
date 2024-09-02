@@ -88,6 +88,12 @@ class _DaerahState extends State<Daerah> {
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan ukuran layar
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Menentukan ukuran teks berdasarkan lebar dan tinggi layar
+    double fontSize = (screenWidth * 0.050) + (screenHeight * 0.054);
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
@@ -111,12 +117,12 @@ class _DaerahState extends State<Daerah> {
               children: [
                 SizedBox(height: 170),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
                     'Pilih\nLokasi\nBarbershop',
                     style: TextStyle(
                       fontFamily: 'Outifit',
-                      fontSize: 58,
+                      fontSize: fontSize,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),

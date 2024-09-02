@@ -27,7 +27,7 @@ class ECommerceApp extends StatelessWidget {
           }
           return Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(200),
+              preferredSize: Size.fromHeight(150),
               child: Container(
                 decoration: BoxDecoration(
                   color: const Color(0xFF0E2954),
@@ -81,8 +81,9 @@ class AppbarBody extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(height: 50),
           Text(
             "Find your, \nFavorite Treatments !",
             style: TextStyle(
@@ -90,45 +91,6 @@ class AppbarBody extends StatelessWidget {
               fontSize: 27,
               color: Colors.white,
             ),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  height: 40,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextField(
-                      cursorHeight: 20,
-                      autofocus: false,
-                      cursorColor: Colors.black,
-                      onChanged: (value) {},
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        border: InputBorder.none,
-                        suffixIcon: Icon(Icons.search, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 10),
-              CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 17,
-                child: Icon(Icons.filter_list, color: Colors.black),
-              ),
-            ],
           ),
         ],
       ),

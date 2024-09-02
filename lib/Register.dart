@@ -26,13 +26,16 @@ class _RegisterState extends State<Register> {
 
   final _phoneFocusNode = FocusNode();
   String _phoneHint = 'Phone Number'; // Default hint text
+
+  String? _selectedGender; // Tambahkan variabel untuk menyimpan pilihan gender
+
   @override
   void initState() {
     super.initState();
     _phoneFocusNode.addListener(() {
       if (_phoneFocusNode.hasFocus) {
         setState(() {
-          _phoneHint = '0800-0000-0000'; // Show formatted hint when focused
+          _phoneHint = '08xxxxxxxxxx'; // Show formatted hint when focused
         });
       } else {
         setState(() {
@@ -52,7 +55,7 @@ class _RegisterState extends State<Register> {
         _passwordController.text,
         _phoneController.text,
         _birthDateController.text,
-        _genderController.text,
+        _selectedGender ?? '', // Gunakan pilihan gender yang dipilih
         _addressController.text,
       );
       print('Register response: $result');
@@ -197,12 +200,12 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
                   ),
-                  hintText: 'Birth Date',
+                  hintText: 'Birth Date (yyyy-mm-dd)',
                 ),
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: _genderController,
+              DropdownButtonFormField<String>(
+                value: _selectedGender,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xffE5E5E5),
@@ -212,6 +215,17 @@ class _RegisterState extends State<Register> {
                   ),
                   hintText: 'Gender',
                 ),
+                items: ['Laki-laki', 'Perempuan']
+                    .map((gender) => DropdownMenuItem<String>(
+                          value: gender,
+                          child: Text(gender),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedGender = value;
+                  });
+                },
               ),
               SizedBox(height: 20),
               TextFormField(

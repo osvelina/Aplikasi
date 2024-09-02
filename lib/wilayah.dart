@@ -75,18 +75,21 @@ class _AreaListState extends State<AreaList> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'Daerah Barbershop',
-              style: TextStyle(
-                fontFamily: 'Quicksand',
-                fontSize: 23,
-              ),
+        title: Container(
+          alignment: Alignment.centerLeft, // Menjaga judul tetap di kiri
+          child: Text(
+            'Daerah Barbershop',
+            style: TextStyle(
+              fontFamily: 'Quicksand',
+              fontSize: 23,
+              color: Colors.black,
             ),
-          ],
+          ),
         ),
+        toolbarHeight:
+            kToolbarHeight, // Pastikan toolbar memiliki tinggi default
+        automaticallyImplyLeading:
+            false, // Menonaktifkan padding default agar tidak ada padding ekstra
       ),
       body: FutureBuilder<List<Area>>(
         future: _areasFuture,
@@ -120,9 +123,9 @@ class _AreaListState extends State<AreaList> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.location_city,
-                      size: 50,
+                    Image.asset(
+                      'assets/crop.jpeg',
+                      height: 50,
                     ),
                     SizedBox(width: 16.0),
                     Expanded(

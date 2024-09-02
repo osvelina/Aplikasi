@@ -16,30 +16,28 @@ class _PertanyaanState extends State<Pertanyaan> {
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: Colors.white,
-             shape: RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(10), // Atur radius di bagian bawah AppBar
+                bottom: Radius.circular(10),
               ),
-             ),
-            title: Row(
-              children: [
-                SizedBox(width: 60),
-                Text(
-                  'Pertanyaan',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                )
-              ],
             ),
-           
+            title: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Pertanyaan',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            pinned: true,
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Text(
                     'Ada Pertanyaan tentang\nDaeng Barbershop?\nTanyakan kepada kami\ndi bawah ini',
                     textAlign: TextAlign.center,
@@ -88,7 +86,6 @@ class _PertanyaanState extends State<Pertanyaan> {
                 buildListTile('Berdasarkan bentuk wajah'),
                 Divider(),
                 buildListTile('Berdasarkan tipe rambut'),
-                
               ],
             ),
           ),
@@ -99,7 +96,7 @@ class _PertanyaanState extends State<Pertanyaan> {
                 color: Colors.white,
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 30),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),

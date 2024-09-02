@@ -1,4 +1,4 @@
-import 'package:apk_barbershop/constant.dart';
+// ProdukDetail.dart
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatelessWidget {
@@ -96,7 +96,7 @@ class ProductDetail extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: kapkColor,
+      backgroundColor: Colors.blue,
       elevation: 5,
       leading: Align(
         alignment: Alignment.centerLeft,

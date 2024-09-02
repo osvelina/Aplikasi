@@ -12,7 +12,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController _NoTLPController = TextEditingController();
   TextEditingController _TanggallahirController = TextEditingController();
   TextEditingController _alamatController = TextEditingController();
-  // TextEditingController _emailController = TextEditingController();
 
   final ApiController _apiController = ApiController();
 
@@ -26,7 +25,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (_phoneFocusNode.hasFocus) {
         if (_phoneHint != '0800-0000-0000') {
           setState(() {
-            _phoneHint = '0800-0000-0000'; // Format hint saat fokus
+            _phoneHint = '080000000000'; // Format hint saat fokus
           });
         }
       } else {
@@ -77,11 +76,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null && selectedDate != DateTime.now()) {
+      setState(() {
+        _TanggallahirController.text =
+            '${selectedDate.toLocal()}'.split(' ')[0];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(250),
+        preferredSize: Size.fromHeight(40),
         child: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: _TopPortion(),
@@ -113,20 +128,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               SizedBox(height: 16.0),
-              TextField(
-                controller: _TanggallahirController,
-                decoration: InputDecoration(labelText: 'Tanggal Lahir'),
+              GestureDetector(
+                onTap: () => _selectDate(context),
+                child: AbsorbPointer(
+                  child: TextField(
+                    controller: _TanggallahirController,
+                    decoration: InputDecoration(
+                      labelText: 'Tanggal Lahir',
+                      hintText: 'yyyy-mm-dd',
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 16.0),
               TextField(
                 controller: _alamatController,
                 decoration: InputDecoration(labelText: 'Alamat'),
               ),
-              // SizedBox(height: 16.0),
-              // TextField(
-              //   controller: _emailController,
-              //   decoration: InputDecoration(labelText: 'Email'),
-              // ),
               SizedBox(height: 32.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -140,7 +158,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       tanggalLahir:
                           DateTime.parse(_TanggallahirController.text),
                       alamat: _alamatController.text,
-                      // email: _emailController.text,
                     );
                     // Jika berhasil
                     _showSuccessDialog();
@@ -173,7 +190,7 @@ class _TopPortion extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: 250,
+          height: 200,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
@@ -184,43 +201,18 @@ class _TopPortion extends StatelessWidget {
               ],
             ),
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
             ),
           ),
         ),
         Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: 140,
-            height: 140,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipOval(
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.green,
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          alignment: Alignment.bottomLeft,
+          child: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ],
@@ -243,9 +235,9 @@ class _PhoneNumberFormatter extends TextInputFormatter {
   }
 
   String _formatPhoneNumber(String digits) {
-    if (digits.length <= 3) return digits;
-    if (digits.length <= 6)
-      return '${digits.substring(0, 3)}-${digits.substring(3)}';
-    return '${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6)}';
+    if (digits.length <= 4) return digits;
+    if (digits.length <= 8)
+      return '${digits.substring(0, 4)}-${digits.substring(4)}';
+    return '${digits.substring(0, 4)}-${digits.substring(4, 8)}-${digits.substring(6)}';
   }
 }

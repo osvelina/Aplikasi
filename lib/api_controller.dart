@@ -22,6 +22,11 @@ class ApiController {
     );
   }
 
+  // Base URL for the API
+  String baseUrl() {
+    return 'http://api.daengbarbershop.my.id';
+  }
+
   Future register(
     String name,
     String email,
@@ -54,7 +59,7 @@ class ApiController {
           "${birthDate.year}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}";
 
       Response response = await _dio.post(
-        'http://10.0.2.2:8000/api/auth/register',
+        '${baseUrl()}/api/auth/register',
         data: {
           'name': name,
           'email': email,
@@ -84,7 +89,7 @@ class ApiController {
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       Response response = await _dio.post(
-        'http://10.0.2.2:8000/api/auth/login',
+        '${baseUrl()}/api/auth/login',
         data: {
           'email': email,
           'password': password,
@@ -156,19 +161,37 @@ class ApiController {
 
   Future<List<Map<String, dynamic>>> getJasaProducts() async {
     try {
-      Response response =
-          await _dio.get('http://10.0.2.2:8000/api/produk/jasa');
+      // Retrieve the token from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null) {
+        throw Exception('No access token found. Please log in.');
+      }
+
+      // Add authorization headers with the retrieved token
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      // Make the request with authorization headers
+      Response response = await _dio.get(
+        '${baseUrl()}/api/produk/jasa',
+        options: options,
+      );
+
       if (response.statusCode == 200) {
         Map<String, dynamic> responseBody = response.data;
 
-        // Pastikan data jasa ada di dalam objek responseBody dengan kunci tertentu, misalnya 'data'
+        // Ensure 'data' exists in the response
         if (responseBody.containsKey('data')) {
           List<dynamic> body = responseBody['data'];
 
-          // Ubah data jasa menjadi List<Map<String, dynamic>>
+          // Convert 'data' into a list of Map<String, dynamic>
           List<Map<String, dynamic>> jasaProducts = body
-              .where((item) => item is Map && item['jenisproduk'] == 'jasa')
-              .map((item) => item as Map<String, dynamic>)
+              .map((item) => item['produk'] as Map<String, dynamic>)
               .toList();
 
           return jasaProducts;
@@ -184,54 +207,65 @@ class ApiController {
   }
 
   // Fungsi untuk mengambil produk berdasarkan jenis
-  // Future<List<Map<String, dynamic>>> getProdukByJenis() async {
+  // Future<List<Info>> getProdukByJenis() async {
   //   try {
-  //     Response response =
-  //         await _dio.get('http://10.0.2.2:8000/api/produk/jenis');
+  //     Response response = await _dio.get('${baseUrl()}/api/produk/jenis');
 
   //     if (response.statusCode == 200) {
   //       Map<String, dynamic> responseBody = response.data;
 
-  //       print('Data received from API: $responseBody'); // Debugging
-
-  //       List<Map<String, dynamic>> filteredProduk = [];
-
   //       if (responseBody.containsKey('data')) {
   //         Map<String, dynamic> data = responseBody['data'];
 
-  //         // Filter produk by 'jenisproduk' to include only 'jasa' and 'barang'
-  //         if (data.containsKey('jasa')) {
-  //           filteredProduk.addAll((data['jasa'] as List<dynamic>)
-  //               .map((item) => item as Map<String, dynamic>));
+  //         List<Info> filteredProduk = [];
+
+  //         for (var type in ['jasa', 'barang']) {
+  //           if (data.containsKey(type)) {
+  //             filteredProduk.addAll(
+  //               (data[type] as List<dynamic>).map(
+  //                 (item) => Info(
+  //                   gambar: item['gambar'] ?? '',
+  //                   nama: item['nama'] ?? '',
+  //                   deskripsi: item['deskripsi'] ?? '',
+  //                   harga: item['harga'] ?? '',
+  //                 ),
+  //               ),
+  //             );
+  //           }
   //         }
 
-  //         if (data.containsKey('barang')) {
-  //           filteredProduk.addAll((data['barang'] as List<dynamic>)
-  //               .map((item) => item as Map<String, dynamic>));
-  //         }
+  //         return filteredProduk;
   //       } else {
-  //         print('Unexpected data format: $responseBody');
-  //         throw Exception('Data key not found in API response');
+  //         throw Exception('Expected data not found in API response');
   //       }
-
-  //       print('Filtered products: $filteredProduk'); // Debugging
-
-  //       return filteredProduk;
   //     } else {
-  //       String errorMessage =
-  //           'Unexpected status code: ${response.statusCode}. Response: ${response.data}';
-  //       print('Error: $errorMessage');
-  //       throw Exception('Failed to load data from API: $errorMessage');
+  //       throw Exception('Failed to load data: ${response.statusCode}');
   //     }
   //   } catch (e) {
   //     print('Error in getProdukByJenis: $e');
   //     throw Exception('Failed to load products by jenis: $e');
   //   }
   // }
+
   Future<List<Info>> getProdukByJenis() async {
     try {
-      Response response =
-          await Dio().get('http://10.0.2.2:8000/api/produk/jenis');
+      // Ambil token dari SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final String? token = prefs.getString('access_token');
+
+      if (token == null) {
+        throw Exception('Token tidak tersedia. Silakan login terlebih dahulu.');
+      }
+
+      // Buat request ke API dengan menyertakan token dalam header Authorization
+      Response response = await Dio().get(
+        '${baseUrl()}/api/produk/jenis',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseBody = response.data;
@@ -241,29 +275,35 @@ class ApiController {
         if (responseBody.containsKey('data')) {
           Map<String, dynamic> data = responseBody['data'];
 
+          // Parsing produk 'jasa'
           if (data.containsKey('jasa')) {
             produkList.addAll(
-              (data['jasa'] as List<dynamic>).map(
-                (item) => Info(
-                  gambar: item['gambar']?.toString() ?? '',
-                  nama: item['nama']?.toString() ?? '',
-                  harga: item['harga']?.toString() ?? '',
-                  deskripsi: item['deskripsi']?.toString() ?? '',
-                ),
-              ),
+              (data['jasa'] as List<dynamic>)
+                  .map(
+                    (item) => Info(
+                      gambar: item['gambar']?.toString() ?? '',
+                      nama: item['nama']?.toString() ?? '',
+                      harga: item['harga']?.toString() ?? '',
+                      deskripsi: item['deskripsi']?.toString() ?? '',
+                    ),
+                  )
+                  .toList(),
             );
           }
 
+          // Parsing produk 'barang'
           if (data.containsKey('barang')) {
             produkList.addAll(
-              (data['barang'] as List<dynamic>).map(
-                (item) => Info(
-                  gambar: item['gambar']?.toString() ?? '',
-                  nama: item['nama']?.toString() ?? '',
-                  harga: item['harga']?.toString() ?? '',
-                  deskripsi: item['deskripsi']?.toString() ?? '',
-                ),
-              ),
+              (data['barang'] as List<dynamic>)
+                  .map(
+                    (item) => Info(
+                      gambar: item['gambar']?.toString() ?? '',
+                      nama: item['nama']?.toString() ?? '',
+                      harga: item['harga']?.toString() ?? '',
+                      deskripsi: item['deskripsi']?.toString() ?? '',
+                    ),
+                  )
+                  .toList(),
             );
           }
         } else {
@@ -288,7 +328,7 @@ class ApiController {
 
   Future<List<Map<String, dynamic>>> getLocations() async {
     try {
-      final response = await _dio.get('http://10.0.2.2:8000/api/lokasis');
+      final response = await _dio.get('${baseUrl()}/api/lokasis');
 
       if (response.statusCode != 200) {
         throw Exception('Failed to get locations');
@@ -308,7 +348,7 @@ class ApiController {
   }) async {
     try {
       final response = await _dio.post(
-        'http://10.0.2.2:8000/api/set-location',
+        '${baseUrl()}/api/set-location',
         data: {
           'id_user': userId,
           'id_lokasi': locationId,
@@ -344,7 +384,7 @@ class ApiController {
       }
 
       Response response = await _dio.post(
-        'http://10.0.2.2:8000/api/requestBooking',
+        '${baseUrl()}/api/requestBooking',
         options: Options(
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -379,7 +419,7 @@ class ApiController {
       }
 
       Response response = await _dio.get(
-        'http://10.0.2.2:8000/api/userBookingHistory',
+        '${baseUrl()}/api/userBookingHistory',
         options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
@@ -422,7 +462,7 @@ class ApiController {
       }
 
       Response response = await _dio.get(
-        'http://10.0.2.2:8000/api/userBookingProcess',
+        '${baseUrl()}/api/userBookingProcess',
         options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
@@ -433,15 +473,17 @@ class ApiController {
         },
       );
 
+      // Check if the response is successful
       if (response.statusCode == 200) {
         List<dynamic> responseBody = response.data['bookings'];
+
+        // Convert the response into a list of maps with the necessary fields
         return List<Map<String, dynamic>>.from(responseBody.map((booking) {
           return {
             'id_booking': booking['id_booking'],
-            'nama_produk': booking['produk']['nama'] ??
-                'Nama tidak tersedia', // Tangani null
+            'nama_produk': booking['produk']['nama'] ?? 'Nama tidak tersedia',
             'harga_produk': booking['produk']['harga']?.toString() ??
-                'Harga tidak tersedia', // Tangani null
+                'Harga tidak tersedia',
             'status': booking['status'],
             'tanggal_booking': booking['tanggal_booking'],
           };
@@ -456,7 +498,7 @@ class ApiController {
   }
 
   Future<String?> redirectToPayment(int bookingId) async {
-    final url = 'http://10.0.2.2:8000/api/redirectToPayment/$bookingId';
+    final url = '${baseUrl()}/api/redirectToPayment/$bookingId';
 
     try {
       final response = await _dio.get(
@@ -511,7 +553,7 @@ class ApiController {
       };
 
       final response = await _dio.put(
-        'http://10.0.2.2:8000/api/updatecustomers',
+        '${baseUrl()}/api/updatecustomers',
         data: data,
         options: Options(
           headers: {
@@ -532,20 +574,9 @@ class ApiController {
     }
   }
 
-  Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('access_token');
-  }
-
-  Future logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('access_token');
-  }
-
   Future<List<Map<String, dynamic>>> getContents() async {
     try {
-      final response = await _dio.get('http://10.0.2.2:8000/api/contents');
-
+      final response = await _dio.get('${baseUrl()}/api/contents');
       if (response.statusCode == 200) {
         List<dynamic> contents = response.data['data'];
         return contents.map((content) {
@@ -564,4 +595,28 @@ class ApiController {
       throw Exception('Error fetching contents: $e');
     }
   }
+
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
+  }
+
+  Future logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+  }
 }
+
+// class Info {
+//   final String gambar;
+//   final String nama;
+//   final String deskripsi;
+//   final String harga;
+
+//   Info({
+//     required this.gambar,
+//     required this.nama,
+//     required this.deskripsi,
+//     required this.harga,
+//   });
+// }

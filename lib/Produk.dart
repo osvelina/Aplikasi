@@ -1,7 +1,8 @@
+import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:apk_barbershop/ProductDetail.dart';
 
-class Produk extends StatelessWidget {
+class Produk extends StatefulWidget {
   final List<Info> ProdukInfo;
 
   const Produk({
@@ -10,58 +11,115 @@ class Produk extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _ProdukState createState() => _ProdukState();
+}
+
+class _ProdukState extends State<Produk> {
+  List<Info> _filteredProdukInfo = [];
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredProdukInfo = widget.ProdukInfo;
+  }
+
+  void _updateSearchQuery(String query) {
+    setState(() {
+      _searchQuery = query;
+      _filteredProdukInfo = widget.ProdukInfo.where((product) =>
+              product.nama.toLowerCase().contains(_searchQuery.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      childAspectRatio: 0.68,
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      children: List.generate(
-        ProdukInfo.length,
-        (index) => InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetail(
-                  gambar: ProdukInfo[index].gambar,
-                  nama: ProdukInfo[index].nama,
-                  deskripsi: ProdukInfo[index].deskripsi,
-                ),
-              ),
-            );
-          },
+    return Column(
+      children: [
+        SizedBox(height: 10),
+        Center(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-            margin: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.blueGrey,
-                width: 1,
+            width: MediaQuery.of(context).size.width *
+                0.9, // 80% of the screen width
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: TextField(
+              cursorHeight: 20,
+              autofocus: false,
+              cursorColor: Colors.black,
+              textAlign: TextAlign.left,
+              textAlignVertical:
+                  TextAlignVertical.center, // Center the hint text
+              onChanged: _updateSearchQuery,
+              decoration: InputDecoration(
+                hintText: 'Cari Layanan',
+                hintStyle: TextStyle(color: kapkColor),
+                border: InputBorder.none,
+                suffixIcon: Icon(Icons.search, color: kapkColor),
+                contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10), // Adjust padding if necessary
               ),
             ),
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  child: Image.network(
-                    ProdukInfo[index].gambar,
-                    height: 130,
-                    width: 150,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.error, color: Colors.red);
-                    },
+            decoration: BoxDecoration(
+              border: Border.all(color: kapkColor, width: 2),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+        ),
+        Expanded(
+          child: GridView.count(
+            childAspectRatio: 0.79, // Adjust if needed
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            padding: EdgeInsets.all(10), // Add padding around the grid
+            children: List.generate(
+              _filteredProdukInfo.length,
+              (index) => InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetail(
+                        gambar: _filteredProdukInfo[index].gambar,
+                        nama: _filteredProdukInfo[index].nama,
+                        deskripsi: _filteredProdukInfo[index].deskripsi,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  margin: EdgeInsets.all(10), // Adjust margin to fit design
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.blueGrey,
+                      width: 1,
+                    ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      AspectRatio(
+                        aspectRatio: 16 / 10, // Maintain aspect ratio
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            _filteredProdukInfo[index].gambar,
+                            fit: BoxFit.cover, // Ensure proper scaling
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                  child: Icon(Icons.error,
+                                      color:
+                                          Colors.red)); // Center the error icon
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Text(
-                        ProdukInfo[index].nama,
+                        _filteredProdukInfo[index].nama,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -71,7 +129,7 @@ class Produk extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        ProdukInfo[index].harga,
+                        _filteredProdukInfo[index].harga,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 15,
@@ -80,12 +138,12 @@ class Produk extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
-              ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -23,13 +23,13 @@ class Profile extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               slivers: <Widget>[
                 SliverAppBar(
-                  expandedHeight: 190,
+                  expandedHeight: 110,
                   pinned: true,
                   automaticallyImplyLeading: false,
                   flexibleSpace: Stack(
                     children: [
                       Container(
-                        height: 200,
+                        height: 100,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
@@ -53,28 +53,28 @@ class Profile extends StatelessWidget {
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              ClipOval(
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  child: Container(
-                                    margin: const EdgeInsets.all(8.0),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.green,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // ClipOval(
+                              //   child: Image.network(
+                              //     'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+                              //     fit: BoxFit.cover,
+                              //   ),
+                              // ),
+                              // Positioned(
+                              //   bottom: 0,
+                              //   right: 0,
+                              //   child: CircleAvatar(
+                              //     radius: 20,
+                              //     backgroundColor:
+                              //         Theme.of(context).scaffoldBackgroundColor,
+                              //     child: Container(
+                              //       margin: const EdgeInsets.all(8.0),
+                              //       decoration: const BoxDecoration(
+                              //         color: Colors.green,
+                              //         shape: BoxShape.circle,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -87,7 +87,7 @@ class Profile extends StatelessWidget {
                   delegate: SliverChildListDelegate(
                     [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 0, 4, 0),
+                        padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [

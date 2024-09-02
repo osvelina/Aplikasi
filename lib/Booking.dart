@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'api_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Footer.dart';
@@ -51,17 +52,20 @@ class _BookingState extends State<Booking> {
     return Scaffold(
       backgroundColor: const Color(0xFF0E2954),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            size: 28,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         backgroundColor: const Color(0xFF0E2954),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 2.0), // Adjust padding as needed
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              size: 28,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
         title: Text(
           "Hello $userName",
           style: const TextStyle(
@@ -70,6 +74,8 @@ class _BookingState extends State<Booking> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        toolbarHeight: 60, // Adjust height if necessary
+        titleSpacing: 0, // Ensures title is aligned with leading
       ),
       body: SingleChildScrollView(
         child: Container(
