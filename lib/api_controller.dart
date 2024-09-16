@@ -24,7 +24,7 @@ class ApiController {
 
   // Base URL for the API
   String baseUrl() {
-    return 'http://api.daengbarbershop.my.id';
+    return 'https://api.daengbarbershop.my.id';
   }
 
   Future register(

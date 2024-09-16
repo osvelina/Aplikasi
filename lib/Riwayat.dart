@@ -14,15 +14,8 @@ class Riwayat extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: SizedBox.shrink(),
-          title: Text(
-            'Riwayat',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
-          ),
           centerTitle: true,
+          toolbarHeight: 20.0, // Adjust height of AppBar
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(48.0),
             child: TabBar(

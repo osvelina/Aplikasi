@@ -23,9 +23,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     _phoneFocusNode.addListener(() {
       if (_phoneFocusNode.hasFocus) {
-        if (_phoneHint != '0800-0000-0000') {
+        if (_phoneHint != '08000000000000') {
           setState(() {
-            _phoneHint = '080000000000'; // Format hint saat fokus
+            _phoneHint = '08xx'; // Format hint saat fokus
           });
         }
       } else {
@@ -118,10 +118,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: _NoTLPController,
                 focusNode: _phoneFocusNode,
                 keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _PhoneNumberFormatter(), // Gunakan formatter yang sama
-                ],
+                // inputFormatters: [
+                //   FilteringTextInputFormatter.digitsOnly,
+                //   _PhoneNumberFormatter(), // Gunakan formatter yang sama
+                // ],
                 decoration: InputDecoration(
                   labelText: 'No Telepon',
                   hintText: _phoneHint,
@@ -220,24 +220,24 @@ class _TopPortion extends StatelessWidget {
   }
 }
 
-class _PhoneNumberFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
-    final formatted = _formatPhoneNumber(digitsOnly);
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
-  }
+// class _PhoneNumberFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//     TextEditingValue oldValue,
+//     TextEditingValue newValue,
+//   ) {
+//     final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+//     final formatted = _formatPhoneNumber(digitsOnly);
+//     return TextEditingValue(
+//       text: formatted,
+//       selection: TextSelection.collapsed(offset: formatted.length),
+//     );
+//   }
 
-  String _formatPhoneNumber(String digits) {
-    if (digits.length <= 4) return digits;
-    if (digits.length <= 8)
-      return '${digits.substring(0, 4)}-${digits.substring(4)}';
-    return '${digits.substring(0, 4)}-${digits.substring(4, 8)}-${digits.substring(6)}';
-  }
-}
+//   String _formatPhoneNumber(String digits) {
+//     if (digits.length <= 4) return digits;
+//     if (digits.length <= 8)
+//       return '${digits.substring(0, 4)}-${digits.substring(4)}';
+//     return '${digits.substring(0, 4)}-${digits.substring(4, 8)}-${digits.substring(6)}';
+//   }
+// }

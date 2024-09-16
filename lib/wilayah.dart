@@ -65,31 +65,39 @@ class _AreaListState extends State<AreaList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Container(
-          alignment: Alignment.centerLeft, // Menjaga judul tetap di kiri
-          child: Text(
-            'Daerah Barbershop',
-            style: TextStyle(
-              fontFamily: 'Quicksand',
-              fontSize: 23,
-              color: Colors.black,
-            ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0), // Adjust height if necessary
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: false, // Prevent default leading behavior
+          title: Row(
+            children: [
+              SizedBox(width: 10),
+              IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                iconSize: 30.0, // Adjust size as needed
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(width: 10), // Space between icon and title
+              Expanded(
+                child: Text(
+                  'Daerah Barbershop',
+                  style: TextStyle(
+                    fontFamily: 'Quicksand',
+                    fontSize: 23,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
+
+          titleSpacing: 0, // Ensure no extra spacing
+          toolbarHeight: 60, // Adjust height if necessary
         ),
-        toolbarHeight:
-            kToolbarHeight, // Pastikan toolbar memiliki tinggi default
-        automaticallyImplyLeading:
-            false, // Menonaktifkan padding default agar tidak ada padding ekstra
       ),
       body: FutureBuilder<List<Area>>(
         future: _areasFuture,

@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:apk_barbershop/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'EditProfil.dart';
 import 'Pertanyaan.dart';
 
@@ -52,30 +55,6 @@ class Profile extends StatelessWidget {
                           height: 120,
                           child: Stack(
                             fit: StackFit.expand,
-                            children: [
-                              // ClipOval(
-                              //   child: Image.network(
-                              //     'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-                              //     fit: BoxFit.cover,
-                              //   ),
-                              // ),
-                              // Positioned(
-                              //   bottom: 0,
-                              //   right: 0,
-                              //   child: CircleAvatar(
-                              //     radius: 20,
-                              //     backgroundColor:
-                              //         Theme.of(context).scaffoldBackgroundColor,
-                              //     child: Container(
-                              //       margin: const EdgeInsets.all(8.0),
-                              //       decoration: const BoxDecoration(
-                              //         color: Colors.green,
-                              //         shape: BoxShape.circle,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
                           ),
                         ),
                       ),
@@ -156,7 +135,7 @@ class Profile extends StatelessWidget {
                                   text: 'Live Chat',
                                   icon: Icons.chat,
                                   onTap: () {
-                                    // Action when tapped
+                                    WhatsAppButton()._launchWhatsApp();
                                   },
                                 ),
                                 CustomClickableText(
@@ -244,31 +223,86 @@ class Profile extends StatelessWidget {
   }
 
   Future<void> _showLogoutConfirmation(BuildContext context) async {
-    return showDialog<void>(
+    return showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: false, // Prevent dismissing by tapping outside
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Konfirmasi Logout'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Apakah Anda yakin ingin logout?'),
-              ],
+        return Stack(
+          children: [
+            // Background blur effect
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                    sigmaX: 5.0, sigmaY: 5.0), // Adjust blur intensity
+                child: Container(
+                  color:
+                      Colors.black.withOpacity(0.5), // Semi-transparent color
+                ),
+              ),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Batal'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Logout'),
-              onPressed: () {
-                _logout(context);
-              },
+            // The AlertDialog
+            Center(
+              child: AlertDialog(
+                backgroundColor: Colors.white, // Background color of the dialog
+                title: Text(
+                  'Konfirmasi Logout',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black, // Customize title color
+                  ),
+                ),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(
+                        'Apakah Anda yakin ingin logout?',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87, // Customize content color
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(
+                      'Batal',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Customize button text color
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      'Logout',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // Customize button text color
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          Colors.red, // Background color of the button
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () {
+                      _logout(context);
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         );
@@ -318,6 +352,29 @@ class CustomClickableText extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class WhatsAppButton extends StatelessWidget {
+  final String phoneNumber =
+      '6281288000901'; // Ganti dengan nomor telepon WhatsApp
+  final String message = 'Hallo Admin !'; // Ganti dengan pesan yang diinginkan
+
+  void _launchWhatsApp() async {
+    final url = 'https://wa.me/$phoneNumber?text=$message';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: _launchWhatsApp,
+      child: Text('Chat dengan Kami di WhatsApp'),
     );
   }
 }

@@ -35,7 +35,7 @@ class _RegisterState extends State<Register> {
     _phoneFocusNode.addListener(() {
       if (_phoneFocusNode.hasFocus) {
         setState(() {
-          _phoneHint = '08xxxxxxxxxx'; // Show formatted hint when focused
+          _phoneHint = '08xx'; // Show formatted hint when focused
         });
       } else {
         setState(() {
@@ -74,6 +74,21 @@ class _RegisterState extends State<Register> {
     } catch (e) {
       print('Error occurred: $e');
       // Handle the error as needed
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null && selectedDate != DateTime.now()) {
+      setState(() {
+        _birthDateController.text = '${selectedDate.toLocal()}'.split(' ')[0];
+      });
     }
   }
 
@@ -176,10 +191,10 @@ class _RegisterState extends State<Register> {
                 controller: _phoneController,
                 focusNode: _phoneFocusNode,
                 keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _PhoneNumberFormatter(),
-                ],
+                // inputFormatters: [
+                //   FilteringTextInputFormatter.digitsOnly,
+                //   _PhoneNumberFormatter(),
+                // ],
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xffE5E5E5),
@@ -191,8 +206,10 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               SizedBox(height: 20),
+              SizedBox(height: 20),
               TextFormField(
                 controller: _birthDateController,
+                readOnly: true, // To prevent manual input
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xffE5E5E5),
@@ -200,8 +217,10 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
                   ),
-                  hintText: 'Birth Date (yyyy-mm-dd)',
+                  // labelText: 'Tanggal Lahir',
+                  hintText: 'Tanggal Lahir',
                 ),
+                onTap: () => _selectDate(context), // Trigger date picker on tap
               ),
               SizedBox(height: 20),
               DropdownButtonFormField<String>(
@@ -281,23 +300,23 @@ class _RegisterState extends State<Register> {
   }
 }
 
-class _PhoneNumberFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final text = newValue.text.replaceAll(RegExp(r'\D'), '');
-    final buffer = StringBuffer();
+// class _PhoneNumberFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//       TextEditingValue oldValue, TextEditingValue newValue) {
+//     final text = newValue.text.replaceAll(RegExp(r'\D'), '');
+//     final buffer = StringBuffer();
 
-    // Masukkan karakter format sesuai panjang string
-    if (text.length > 0) buffer.write(text.substring(0, min(text.length, 4)));
-    if (text.length > 4)
-      buffer.write('-${text.substring(4, min(text.length, 8))}');
-    if (text.length > 8)
-      buffer.write('-${text.substring(8, min(text.length, 12))}');
+//     // Masukkan karakter format sesuai panjang string
+//     if (text.length > 0) buffer.write(text.substring(0, min(text.length, 4)));
+//     if (text.length > 4)
+//       buffer.write('-${text.substring(4, min(text.length, 8))}');
+//     if (text.length > 8)
+//       buffer.write('-${text.substring(8, min(text.length, 12))}');
 
-    return newValue.copyWith(
-      text: buffer.toString(),
-      selection: TextSelection.collapsed(offset: buffer.length),
-    );
-  }
-}
+//     return newValue.copyWith(
+//       text: buffer.toString(),
+//       selection: TextSelection.collapsed(offset: buffer.length),
+//     );
+//   }
+// }

@@ -1,3 +1,4 @@
+import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 
 class Request extends StatelessWidget {
@@ -14,12 +15,12 @@ class Request extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kapkColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: kapkColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -43,7 +44,8 @@ class Request extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green),
+                    fontFamily: 'RadioCanada',
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24),
@@ -114,7 +116,7 @@ class RequestIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       Icons.add_circle,
-      color: Colors.green,
+      color: Colors.white,
       size: 70.0,
     );
   }

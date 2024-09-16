@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:apk_barbershop/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'api_controller.dart';
@@ -51,31 +54,38 @@ class _BookingState extends State<Booking> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0E2954),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0E2954),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 2.0), // Adjust padding as needed
-          child: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              size: 28,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0), // Adjust height if necessary
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: false, // Prevent default leading behavior
+          title: Row(
+            children: [
+              SizedBox(width: 8),
+              IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                iconSize: 30.0, // Adjust size as needed
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(width: 10), // Space between icon and title
+              Expanded(
+                child: Text(
+                  "Hello $userName",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
+          titleSpacing: 0, // Ensure no extra spacing
+          toolbarHeight: 60, // Adjust height if necessary
         ),
-        title: Text(
-          "Hello $userName",
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        toolbarHeight: 60, // Adjust height if necessary
-        titleSpacing: 0, // Ensures title is aligned with leading
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -91,9 +101,9 @@ class _BookingState extends State<Booking> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 20.0),
               Container(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(9.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12.0),
@@ -147,23 +157,80 @@ class _BookingState extends State<Booking> {
 
                               showDialog(
                                 context: context,
+                                barrierDismissible:
+                                    false, // Prevent dismissing by tapping outside
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("Success"),
-                                    content: Text(
-                                        "Book berhasil, menunggu konfirmasi server"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => Footer()),
-                                            (route) => false,
-                                          );
-                                        },
-                                        child: Text("OK"),
+                                  return Stack(
+                                    children: [
+                                      // Background blur effect
+                                      Positioned.fill(
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                              sigmaX: 6.0,
+                                              sigmaY:
+                                                  6.0), // Adjust blur intensity
+                                          child: Container(
+                                            color: Colors.white.withOpacity(
+                                                0), // Semi-transparent color
+                                          ),
+                                        ),
+                                      ),
+                                      // The AlertDialog
+                                      Center(
+                                        child: AlertDialog(
+                                          backgroundColor: kapkColor,
+                                          // Background color of the dialog
+                                          title: Text(
+                                            "Success",
+                                            style: TextStyle(
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.bold,
+                                              color: whiteColor,
+                                              // Customize title color
+                                            ),
+                                          ),
+                                          content: Text(
+                                            "Book berhasil, menunggu konfirmasi server",
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              color: Colors
+                                                  .white, // Customize content color
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Footer()),
+                                                  (route) => false,
+                                                );
+                                              },
+                                              style: TextButton.styleFrom(
+                                                disabledBackgroundColor: Colors
+                                                    .white, // Text color of the button
+                                                backgroundColor: Colors.white,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                    vertical: 12),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "OK",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   );
@@ -257,16 +324,16 @@ class _BookingState extends State<Booking> {
               Icon(
                 icon,
                 color: Colors.blueGrey,
-                size: 30,
+                size: 25,
               ),
-              const SizedBox(width: 8.0),
+              const SizedBox(width: 5.0),
               Text(
                 (selectedDate != null)
                     ? ' ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year} ${selectedDate!.hour}:${selectedDate!.minute}'
                     : '__ : __',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16.0,
+                  fontSize: 12.0,
                 ),
               ),
             ],
@@ -302,7 +369,7 @@ class _BookingState extends State<Booking> {
                     ? const Color(0xFF0E2954)
                     : null,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
                 margin: const EdgeInsets.only(bottom: 5),
                 child: ListTile(
